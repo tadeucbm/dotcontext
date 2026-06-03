@@ -10,9 +10,9 @@ import {
   BaseDependencies,
   displayProgressBar,
   createBox,
-} from '../shared';
-import { WorkflowService } from '../workflow';
-import { StackDetector } from '../stack';
+} from '../../../shared';
+import { WorkflowService } from '../../../harness/application/workflow';
+import { StackDetector } from '../../../harness/application/context/intelligence/stack';
 import {
   PrevcStatus,
   PrevcPhase,
@@ -20,7 +20,7 @@ import {
   ROLE_DISPLAY_NAMES_EN,
   getScaleName,
   ProjectScale,
-} from '../../workflow';
+} from '../../../harness/domain/workflow';
 
 export type ReportServiceDependencies = BaseDependencies;
 

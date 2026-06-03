@@ -11,4 +11,4 @@ export {
   type ProjectState,
   type StateDetectionResult,
   type StateDetectorOptions,
-} from '../cli/stateDetector';
+} from '../stateDetector';
