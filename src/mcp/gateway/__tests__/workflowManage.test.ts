@@ -136,9 +136,9 @@ describe('workflow MCP harness integration', () => {
       repoPath: tempDir,
     }, { repoPath: tempDir });
 
-    await fs.ensureDir(path.join(tempDir, '.context', 'harness'));
+    await fs.ensureDir(path.join(tempDir, '.context', 'config'));
     await fs.writeJson(
-      path.join(tempDir, '.context', 'harness', 'policy.json'),
+      path.join(tempDir, '.context', 'config', 'policy.json'),
       {
         version: 1,
         defaultEffect: 'allow',
@@ -225,7 +225,7 @@ describe('workflow MCP harness integration', () => {
     expect(approveResponse.plan.approved_at).toBeDefined();
     expect(approveResponse.approval.plan_approved).toBe(true);
 
-    const plansIndex = await fs.readJson(path.join(tempDir, '.context', 'workflow', 'plans.json'));
+    const plansIndex = await fs.readJson(path.join(tempDir, '.context', 'runtime', 'workflows', 'plans.json'));
     const persistedPlan = [...plansIndex.active, ...plansIndex.completed].find((plan: { slug: string }) => plan.slug === 'core-plan');
     expect(persistedPlan.approval_status).toBe('approved');
     expect(persistedPlan.approved_by).toBe('reviewer');
@@ -238,13 +238,13 @@ describe('workflow MCP harness integration', () => {
 
     expect(relinkResponse.success).toBe(true);
 
-    const relinkedPlansIndex = await fs.readJson(path.join(tempDir, '.context', 'workflow', 'plans.json'));
+    const relinkedPlansIndex = await fs.readJson(path.join(tempDir, '.context', 'runtime', 'workflows', 'plans.json'));
     const relinkedPlan = [...relinkedPlansIndex.active, ...relinkedPlansIndex.completed].find((plan: { slug: string }) => plan.slug === 'core-plan');
     expect(relinkedPlan.approval_status).toBe('approved');
     expect(relinkedPlan.approved_by).toBe('reviewer');
     expect(relinkedPlan.approved_at).toBeDefined();
 
-    const workflowState = await fs.readJson(path.join(tempDir, '.context', 'harness', 'workflows', 'prevc.json'));
+    const workflowState = await fs.readJson(path.join(tempDir, '.context', 'runtime', 'workflows', 'prevc.json'));
     expect(workflowState.status.approval.plan_approved).toBe(true);
     expect(workflowState.status.approval.approved_by).toBe('reviewer');
     expect(workflowState.status.approval.approved_at).toBeDefined();
@@ -333,7 +333,7 @@ describe('workflow MCP harness integration', () => {
     expect(linkResponse.planCreatedForGates).toBe(false);
     expect(linkResponse.enhancementPrompt).toContain('workflow-init({ name: "standalone-plan" })');
     expect(linkResponse.enhancementPrompt).toContain('Call plan({ action: "link", planSlug: "standalone-plan" }) again');
-    expect(linkResponse.workflowStatePath).toContain('.context/harness/workflows/prevc.json');
+    expect(linkResponse.workflowStatePath).toContain('.context/runtime/workflows/prevc.json');
     expect(linkResponse.nextSteps).toContain(
       'REQUIRED: Call workflow-init({ name: "standalone-plan" }) to start the harness-backed PREVC workflow'
     );

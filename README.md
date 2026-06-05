@@ -96,8 +96,12 @@ One `.context/` directory stores durable project knowledge and workflow state.
 ├── agents/      # Agent playbooks
 ├── skills/      # On-demand expertise guides
 ├── plans/       # Structured PREVC plans and execution tracking
-├── workflow/    # PREVC workflow state and collaboration records
-└── harness/     # Runtime state, policy, sensors, sessions, contracts, replay, datasets
+├── config/      # Authored config: policy.json and sensors.json (version-controlled)
+└── runtime/     # Generated state (gitignored):
+    ├── sessions/      # one folder per session: session.json, trace.jsonl, artifacts/
+    ├── workflows/     # PREVC state (prevc.json), plan tracking, collaboration records
+    ├── contracts/     # task and handoff contracts
+    └── evaluations/   # replays and failure datasets
 ```
 
 ### Harness Runtime
@@ -160,7 +164,7 @@ The `execution_evidence` gate checks the active task contract before E -> V:
 
 ### Sensors
 
-`context({ action: "init" })` bootstraps `.context/harness/sensors.json` so each project can customize its quality checks.
+`context({ action: "init" })` bootstraps `.context/config/sensors.json` so each project can customize its quality checks.
 
 Built-in sensors registered by the harness:
 
@@ -396,7 +400,7 @@ The MCP adapter currently exposes 11 tools: 7 action-based gateways plus 4 dedic
 | `skill` | Skill management | `list`, `getContent`, `getForPhase`, `scaffold`, `export`, `fill` |
 | `harness` | Explicit runtime operations | sessions, traces, artifacts, checkpoints, tasks, handoffs, sensors, policies, replay, datasets |
 
-`context init` also bootstraps `.context/harness/sensors.json`. While that catalog is still in bootstrap form, `context listToFill` and `context fill` can return it so the AI can customize project-specific quality sensors.
+`context init` also bootstraps `.context/config/sensors.json`. While that catalog is still in bootstrap form, `context listToFill` and `context fill` can return it so the AI can customize project-specific quality sensors.
 
 `searchQA` ranks generated `.context/docs/qa/*.md` helper docs by keyword match. It is a lightweight shortcut, not embedding-based semantic retrieval, and `generateQA` is opt-in.
 

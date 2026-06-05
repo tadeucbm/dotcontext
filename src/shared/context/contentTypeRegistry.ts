@@ -72,7 +72,7 @@ export const CONTENT_TYPE_REGISTRY: ContentType[] = [
   {
     id: 'sensors',
     displayName: 'Harness Sensors',
-    contextPath: '.context/harness',
+    contextPath: '.context/config',
     filePattern: 'sensors.json',
     description: 'Project-specific harness sensor catalog and quality checks',
     supportsExport: false,

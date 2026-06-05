@@ -10,7 +10,7 @@ const PLAN_SLUG = 'gates-mvp';
 async function setupRepo(): Promise<string> {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'plan-acceptance-'));
   await fs.mkdir(path.join(tempDir, '.context', 'plans'), { recursive: true });
-  await fs.mkdir(path.join(tempDir, '.context', 'workflow'), { recursive: true });
+  await fs.mkdir(path.join(tempDir, '.context', 'runtime', 'workflows'), { recursive: true });
 
   const planPath = path.join(tempDir, '.context', 'plans', `${PLAN_SLUG}.md`);
   await fs.writeFile(
@@ -50,7 +50,7 @@ async function seedAcceptance(
   tempDir: string,
   command: string[]
 ): Promise<void> {
-  const store = new PlanTrackingStore(path.join(tempDir, '.context', 'workflow'));
+  const store = new PlanTrackingStore(path.join(tempDir, '.context', 'runtime', 'workflows'));
   const tracking =
     (await store.load(PLAN_SLUG)) ?? store.createEmpty(PLAN_SLUG);
   const now = new Date().toISOString();
@@ -82,7 +82,7 @@ describe('PlanUpdateOrchestrator acceptance gate', () => {
       linker.updatePlanStep(PLAN_SLUG, 'phase-1', 1, 'completed')
     ).rejects.toBeInstanceOf(AcceptanceFailedError);
 
-    const store = new PlanTrackingStore(path.join(tempDir, '.context', 'workflow'));
+    const store = new PlanTrackingStore(path.join(tempDir, '.context', 'runtime', 'workflows'));
     const tracking = await store.load(PLAN_SLUG);
     const step = tracking!.phases['phase-1'].steps.find((s) => s.stepIndex === 1)!;
     expect(step.status).toBe('in_progress');
@@ -98,7 +98,7 @@ describe('PlanUpdateOrchestrator acceptance gate', () => {
     const ok = await linker.updatePlanStep(PLAN_SLUG, 'phase-1', 1, 'completed');
     expect(ok).toBe(true);
 
-    const store = new PlanTrackingStore(path.join(tempDir, '.context', 'workflow'));
+    const store = new PlanTrackingStore(path.join(tempDir, '.context', 'runtime', 'workflows'));
     const tracking = await store.load(PLAN_SLUG);
     const step = tracking!.phases['phase-1'].steps.find((s) => s.stepIndex === 1)!;
     expect(step.status).toBe('completed');
@@ -114,7 +114,7 @@ describe('PlanUpdateOrchestrator acceptance gate', () => {
     const ok = await linker.updatePlanStep(PLAN_SLUG, 'phase-1', 1, 'skipped');
     expect(ok).toBe(true);
 
-    const store = new PlanTrackingStore(path.join(tempDir, '.context', 'workflow'));
+    const store = new PlanTrackingStore(path.join(tempDir, '.context', 'runtime', 'workflows'));
     const tracking = await store.load(PLAN_SLUG);
     const step = tracking!.phases['phase-1'].steps.find((s) => s.stepIndex === 1)!;
     expect(step.status).toBe('skipped');

@@ -244,7 +244,7 @@ the transition and the step keeps its prior status; the result is recorded
 under `acceptanceRun` for auditing.
 
 Seed an acceptance on the tracked step (JSON under
-`.context/workflow/plan-tracking/<slug>.json`):
+`.context/runtime/workflows/plan-tracking/<slug>.json`):
 
 ```json
 {

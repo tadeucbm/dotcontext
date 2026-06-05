@@ -12,6 +12,7 @@ import {
 } from '../workflow';
 
 import { HarnessPolicyBlockedError } from '../policies/policyService';
+import { resolveRuntimeLayout } from '../../../shared/fs/pathHelpers';
 
 export interface HarnessWorkflowInitInput {
   name: string;
@@ -58,7 +59,7 @@ export class HarnessWorkflowActionService {
       archivePrevious: params.archive_previous,
     });
 
-    const workflowStatePath = path.join(contextPath, 'harness', 'workflows', 'prevc.json');
+    const workflowStatePath = resolveRuntimeLayout(contextPath).prevcFile;
     const settings = await service.getSettings();
     const scale = getScaleName(status.project.scale as ProjectScale);
     const isAutonomous = settings.autonomous_mode;
@@ -96,7 +97,7 @@ export class HarnessWorkflowActionService {
       harness: harness ? {
         sessionId: harness.binding.sessionId,
         sessionStatus: harness.session.status,
-        harnessPath: path.join(contextPath, 'harness'),
+        runtimeStatePath: resolveRuntimeLayout(contextPath).runtimeDir,
       } : null,
       _actionRequired: true,
       _status: 'workflow_active',
@@ -116,13 +117,13 @@ export class HarnessWorkflowActionService {
         error: 'No workflow found. Initialize a workflow first.',
         suggestion: 'Use workflow-init({ name: "feature-name" }) to start.',
         note: 'Workflows enable structured PREVC phases. Skip for trivial changes.',
-        workflowStatePath: path.join(contextPath, 'harness', 'workflows', 'prevc.json'),
+        workflowStatePath: resolveRuntimeLayout(contextPath).prevcFile,
       };
     }
 
     const summary = await service.getSummary();
     const status = await service.getStatus();
-    const workflowStatePath = path.join(contextPath, 'harness', 'workflows', 'prevc.json');
+    const workflowStatePath = resolveRuntimeLayout(contextPath).prevcFile;
     const orchestration = await service.getPhaseOrchestration(summary.currentPhase);
     const harness = await service.getHarnessStatus();
 
@@ -155,7 +156,7 @@ export class HarnessWorkflowActionService {
         success: false,
         error: 'No workflow found. Initialize a workflow first.',
         suggestion: 'Use workflow-init({ name: "feature-name" }) to start.',
-        workflowStatePath: path.join(contextPath, 'harness', 'workflows', 'prevc.json'),
+        workflowStatePath: resolveRuntimeLayout(contextPath).prevcFile,
       };
     }
 

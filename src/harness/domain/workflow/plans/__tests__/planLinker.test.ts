@@ -10,7 +10,7 @@ describe('PlanLinker plan parsing', () => {
   beforeEach(async () => {
     tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'plan-linker-test-'));
     await fs.mkdir(path.join(tempDir, '.context', 'plans'), { recursive: true });
-    await fs.mkdir(path.join(tempDir, '.context', 'workflow'), { recursive: true });
+    await fs.mkdir(path.join(tempDir, '.context', 'runtime', 'workflows'), { recursive: true });
   });
 
   afterEach(async () => {
@@ -163,8 +163,8 @@ phases:
   it('projects the workflow index and markdown from canonical plan tracking', async () => {
     const planSlug = 'projection-canonical-state';
     const planPath = path.join(tempDir, '.context', 'plans', `${planSlug}.md`);
-    const trackingPath = path.join(tempDir, '.context', 'workflow', 'plan-tracking', `${planSlug}.json`);
-    const plansIndexPath = path.join(tempDir, '.context', 'workflow', 'plans.json');
+    const trackingPath = path.join(tempDir, '.context', 'runtime', 'workflows', 'plan-tracking', `${planSlug}.json`);
+    const plansIndexPath = path.join(tempDir, '.context', 'runtime', 'workflows', 'plans.json');
 
     await fs.writeFile(
       planPath,
@@ -226,7 +226,7 @@ phases:
   it('hydrates linked plan execution state from tracking JSON instead of markdown defaults', async () => {
     const planSlug = 'tracked-plan';
     const planPath = path.join(tempDir, '.context', 'plans', `${planSlug}.md`);
-    const workflowPath = path.join(tempDir, '.context', 'workflow');
+    const workflowPath = path.join(tempDir, '.context', 'runtime', 'workflows');
 
     await fs.writeFile(
       planPath,

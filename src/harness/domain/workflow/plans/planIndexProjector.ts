@@ -7,7 +7,7 @@ import type { PlanExecutionTracking } from './executionTypes';
 
 /**
  * Projects plan tracking records into the workflow index at
- * `.context/workflow/plans.json`.
+ * `.context/runtime/workflows/plans.json`.
  *
  * Cache semantics: an in-memory cache of the last projected index is kept and
  * only invalidated explicitly via `invalidateCache()` (called by the

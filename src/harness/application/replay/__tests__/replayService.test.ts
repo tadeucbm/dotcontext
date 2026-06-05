@@ -32,7 +32,7 @@ describe('HarnessReplayService', () => {
 
     expect(replay.sessionId).toBe(session.id);
     expect(replay.eventCount).toBeGreaterThan(0);
-    expect(await fs.pathExists(path.join(tempDir, '.context', 'harness', 'replays', `${replay.id}.json`))).toBe(false);
+    expect(await fs.pathExists(path.join(tempDir, '.context', 'runtime', 'evaluations', 'replays', `${replay.id}.json`))).toBe(false);
     expect(await service.listReplays({ sessionId: session.id })).toHaveLength(0);
   });
 
@@ -57,6 +57,6 @@ describe('HarnessReplayService', () => {
     expect(replay.events.map(event => event.source)).toContain('checkpoint');
     expect(list).toHaveLength(1);
     expect(list[0].sessionId).toBe(session.id);
-    expect(await fs.pathExists(path.join(tempDir, '.context', 'harness', 'replays', `${replay.id}.json`))).toBe(true);
+    expect(await fs.pathExists(path.join(tempDir, '.context', 'runtime', 'evaluations', 'replays', `${replay.id}.json`))).toBe(true);
   });
 });

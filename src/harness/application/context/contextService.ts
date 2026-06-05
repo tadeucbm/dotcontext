@@ -23,6 +23,8 @@ import {
   toolExecutionContext,
   type ContextLayoutEntry,
 } from '../../../shared';
+import { resolveRuntimeLayout } from '../../../shared/fs/pathHelpers';
+import { migrateLegacyContextLayout } from '../../../shared/fs/legacyLayoutMigration';
 import { HarnessWorkflowStateService } from '../../adapters/out/workflowState/workflowStateService';
 
 export interface HarnessContextServiceOptions {
@@ -108,22 +110,35 @@ export class HarnessContextService {
   async bootstrapStatus(repoPath?: string): Promise<HarnessBootstrapStatusResult> {
     const resolvedRepoPath = path.resolve(repoPath || this.repoPath);
     const outputDir = path.join(resolvedRepoPath, '.context');
+    await migrateLegacyContextLayout(outputDir);
     const scaffoldStatus = await this.check(resolvedRepoPath) as Record<string, unknown>;
     const workflowStateService = new HarnessWorkflowStateService({ contextPath: outputDir });
 
-    const harnessDir = path.join(outputDir, 'harness');
+    const layout = resolveRuntimeLayout(outputDir);
     const qaDir = path.join(outputDir, 'docs', 'qa');
-    const sessionsDir = path.join(harnessDir, 'sessions');
-    const tracesDir = path.join(harnessDir, 'traces');
-    const artifactsDir = path.join(harnessDir, 'artifacts');
+    const sessionsDir = layout.sessionsDir;
+
+    const countSessionsWith = async (fileName: string): Promise<number> => {
+      if (!(await fs.pathExists(sessionsDir))) {
+        return 0;
+      }
+      const entries = await fs.readdir(sessionsDir, { withFileTypes: true });
+      let count = 0;
+      for (const entry of entries) {
+        if (entry.isDirectory() && (await fs.pathExists(path.join(sessionsDir, entry.name, fileName)))) {
+          count += 1;
+        }
+      }
+      return count;
+    };
 
     const [qa, workflowActive, harnessBinding, sessionCount, traceCount, artifactSessionCount] = await Promise.all([
       fs.pathExists(qaDir).then((exists) => exists ? fs.readdir(qaDir).then((entries) => entries.some((entry) => entry.endsWith('.md') && entry.toLowerCase() !== 'readme.md')) : false),
       workflowStateService.exists(),
       workflowStateService.getBinding().then((binding) => Boolean(binding)),
-      fs.pathExists(sessionsDir).then((exists) => exists ? fs.readdir(sessionsDir).then((entries) => entries.filter((entry) => entry.endsWith('.json')).length) : 0),
-      fs.pathExists(tracesDir).then((exists) => exists ? fs.readdir(tracesDir).then((entries) => entries.filter((entry) => entry.endsWith('.jsonl')).length) : 0),
-      fs.pathExists(artifactsDir).then((exists) => exists ? fs.readdir(artifactsDir).then((entries) => entries.length) : 0),
+      countSessionsWith('session.json'),
+      countSessionsWith('trace.jsonl'),
+      countSessionsWith('artifacts'),
     ]);
 
     const scaffold = {
@@ -167,16 +182,16 @@ export class HarnessContextService {
         nextSteps.push('Regenerate or create .context/skills so skills are available to agents.');
       }
       if (!scaffold.sensors) {
-        nextSteps.push('Regenerate or create .context/harness/sensors.json so quality sensors are customizable.');
+        nextSteps.push('Regenerate or create .context/config/sensors.json so quality sensors are customizable.');
       }
       if (!runtime.workflow) {
-        nextSteps.push('Run workflow-init to create .context/workflow and enable PREVC execution.');
+        nextSteps.push('Run workflow-init to create .context/runtime/workflows and enable PREVC execution.');
       }
       if (runtime.workflow && !runtime.harnessBinding) {
         nextSteps.push('Create or refresh the workflow harness binding so workflow and harness stay connected.');
       }
       if (!runtime.harness) {
-        nextSteps.push('Run a workflow or harness action to materialize .context/harness runtime state.');
+        nextSteps.push('Run a workflow or harness action to materialize .context/runtime state.');
       }
     }
     if (nextSteps.length === 0) {
@@ -242,7 +257,7 @@ NEXT ACTIONS REQUIRED:
 
 WORKFLOW:
 Step 1: Use context with action "fillSingle" for each file in pendingFiles array
-Step 2: Use workflow-init with name parameter to create workflow (creates .context/workflow/)
+Step 2: Use workflow-init with name parameter to create workflow (creates .context/runtime/workflows/)
 
 Skip workflow-init ONLY if making trivial changes (typos, single-line edits).`,
           nextSteps: [
@@ -263,7 +278,7 @@ RECOMMENDED NEXT ACTION:
 Initialize a PREVC workflow to enable structured development.
 
 Use workflow-init with name parameter to create workflow structure.
-This creates .context/workflow/ and enables phase-gated execution (Plan → Review → Execute → Verify → Complete).
+This creates .context/runtime/workflows/ and enables phase-gated execution (Plan → Review → Execute → Verify → Complete).
 
 Skip ONLY for trivial changes (typos, single-line edits).`,
         nextSteps: [
@@ -548,7 +563,7 @@ function buildPlanWorkflowPrompt(params: {
 The plan file exists, but planning is not operational until PREVC is started through workflow-init.
 
 workflow-init is the MCP entry point that creates the canonical harness workflow state at:
-.context/harness/workflows/prevc.json
+.context/runtime/workflows/prevc.json
 
 NEXT ACTIONS:
 ${fillStep}

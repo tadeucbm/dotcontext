@@ -17,7 +17,7 @@ describe('FileCollaborationStore', () => {
   beforeEach(async () => {
     tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'dotcontext-collaboration-store-'));
     contextPath = path.join(tempDir, '.context');
-    filePath = path.join(contextPath, 'workflow', 'collaboration-sessions.json');
+    filePath = path.join(contextPath, 'runtime', 'workflows', 'collaboration-sessions.json');
   });
 
   afterEach(async () => {

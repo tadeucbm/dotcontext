@@ -58,7 +58,7 @@ describe('HarnessDatasetService', () => {
     expect(dataset.failures).toHaveLength(2);
     expect(dataset.clusters[0]?.count).toBe(2);
     expect(datasets).toHaveLength(1);
-    expect(await fs.pathExists(path.join(tempDir, '.context', 'harness', 'replays'))).toBe(false);
-    expect(await fs.pathExists(path.join(tempDir, '.context', 'harness', 'datasets', `${dataset.id}.json`))).toBe(true);
+    expect(await fs.pathExists(path.join(tempDir, '.context', 'runtime', 'evaluations', 'replays'))).toBe(false);
+    expect(await fs.pathExists(path.join(tempDir, '.context', 'runtime', 'evaluations', 'datasets', `${dataset.id}.json`))).toBe(true);
   });
 });

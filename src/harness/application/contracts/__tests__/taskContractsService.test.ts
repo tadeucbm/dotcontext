@@ -69,7 +69,7 @@ describe('HarnessTaskContractsService', () => {
     expect(tasks[0].title).toBe('Implement alpha');
     expect(handoff.from).toBe('planner');
 
-    const contractPath = path.join(tempDir, '.context', 'harness', 'contracts', 'tasks', `${task.id}.json`);
+    const contractPath = path.join(tempDir, '.context', 'runtime', 'contracts', 'tasks', `${task.id}.json`);
     expect(await fs.pathExists(contractPath)).toBe(true);
   });
 

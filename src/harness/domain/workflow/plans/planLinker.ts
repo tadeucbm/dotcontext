@@ -13,6 +13,7 @@ import type { AgentMetadata } from '../agents';
 import { AgentRegistry, createAgentRegistry } from '../agents';
 import { PrevcStatusManager } from '../status/statusManager';
 import { PlanExecutionResolver } from './planExecutionResolver';
+import { resolveRuntimeLayout } from '../../../../shared/fs/pathHelpers';
 import { PlanIndexProjector } from './planIndexProjector';
 import { PlanLinkerParser } from './planLinkerParser';
 import { PlanTrackingStore } from './planTrackingStore';
@@ -28,7 +29,7 @@ import { PlanUpdateOrchestrator, PlanStepUpdateOptions } from './planUpdateOrche
  *   - document parsing (markdown → `LinkedPlan`)
  *   - index queries (active/completed plans, per-phase lookups)
  *
- * Tracking JSON under `.context/workflow/plan-tracking/{slug}.json` is the
+ * Tracking JSON under `.context/runtime/workflows/plan-tracking/{slug}.json` is the
  * canonical runtime source of truth. Markdown is a read-only projection.
  */
 export class PlanLinker {
@@ -49,7 +50,7 @@ export class PlanLinker {
   ) {
     this.contextPath = path.join(repoPath, '.context');
     this.plansPath = path.join(this.contextPath, 'plans');
-    this.workflowPath = path.join(this.contextPath, 'workflow');
+    this.workflowPath = resolveRuntimeLayout(this.contextPath).workflowsDir;
     this.agentRegistry = createAgentRegistry(repoPath);
     this.parser = new PlanLinkerParser();
     this.trackingStore = new PlanTrackingStore(this.workflowPath);

@@ -61,18 +61,15 @@ flowchart TD
     Root --> Agents["agents/"]
     Root --> Skills["skills/"]
     Root --> Plans["plans/"]
-    Root --> Workflow["workflow/"]
-    Root --> Harness["harness/"]
+    Root --> Config["config/"]
+    Root --> Runtime["runtime/"]
 
-    Harness --> Sensors["sensors.json"]
-    Harness --> Policy["policy.json"]
-    Harness --> Sessions["sessions/"]
-    Harness --> Traces["traces/"]
-    Harness --> Artifacts["artifacts/"]
-    Harness --> Contracts["contracts/"]
-    Harness --> HWorkflows["workflows/"]
-    Harness --> Replays["replays/"]
-    Harness --> Datasets["datasets/"]
+    Config --> Sensors["sensors.json"]
+    Config --> Policy["policy.json"]
+    Runtime --> Sessions["sessions/&lt;id&gt;/ (session.json, trace.jsonl, artifacts/)"]
+    Runtime --> RWorkflows["workflows/ (prevc.json, plan-tracking, collaboration)"]
+    Runtime --> Contracts["contracts/"]
+    Runtime --> Evaluations["evaluations/ (replays, datasets)"]
 ```
 
 
@@ -84,9 +81,9 @@ O projeto separa contexto em tres classes importantes:
 
 | Classe      | Exemplos                                                                                             | Vai para git?   | Funcao                                         |
 | ----------- | ---------------------------------------------------------------------------------------------------- | --------------- | ---------------------------------------------- |
-| `versioned` | `.context/docs`, `.context/agents`, `.context/skills`, `harness/sensors.json`, `harness/policy.json` | Sim             | Conhecimento duravel e configuracao do projeto |
+| `versioned` | `.context/docs`, `.context/agents`, `.context/skills`, `config/sensors.json`, `config/policy.json`   | Sim             | Conhecimento duravel e configuracao do projeto |
 | `local`     | `.context/plans`                                                                                     | Nao, por padrao | Artefatos locais de trabalho e planejamento    |
-| `runtime`   | `.context/workflow`, `.context/harness/sessions`, `traces`, `artifacts`, `replays`, `datasets`       | Nao             | Estado vivo de execucao                        |
+| `runtime`   | `.context/runtime/**` (sessions, workflows, contracts, evaluations)                                  | Nao             | Estado vivo de execucao                        |
 
 
 Essa distincao e importante porque evita misturar:
@@ -229,7 +226,7 @@ Em outras palavras:
 - workflow responde "em que etapa estamos?"
 - harness responde "o que aconteceu, com que evidencias, sob quais regras?"
 
-No projeto atual, o estado canonico do workflow e persistido em `.context/harness/workflows/prevc.json`, enquanto `.context/workflow/` continua sendo a area operacional de workflow.
+No projeto atual, o estado canonico do workflow e persistido em `.context/runtime/workflows/prevc.json`, que tambem concentra plan-tracking e registros de colaboracao. Layouts legados em `.context/harness/` e `.context/workflow/` sao migrados automaticamente no primeiro acesso.
 
 ## 6. Harness Engineering
 
@@ -285,7 +282,7 @@ sequenceDiagram
     participant U as Usuario ou AI tool
     participant A as CLI ou MCP
     participant H as Harness
-    participant S as .context/harness
+    participant S as .context/runtime
 
     U->>A: Iniciar tarefa ou workflow
     A->>H: Criar ou carregar sessao

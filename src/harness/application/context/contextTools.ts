@@ -25,6 +25,7 @@ import { QAService } from './intelligence/qa';
 import { HarnessPolicyService } from '../policies/policyService';
 import { HarnessSensorCatalogService } from '../sensors/sensorCatalogService';
 import { getUntrackedContextLayoutEntries } from '../../../shared';
+import { resolveRuntimeLayout } from '../../../shared/fs/pathHelpers';
 import { createSkillRegistry } from '../../domain/workflow/skills';
 import { ensureGitignorePatterns } from '../../../utils/gitignoreManager';
 
@@ -138,11 +139,11 @@ async function collectScaffoldFiles(
   }
 
   if (target === 'all' || target === 'sensors') {
-    const sensorsPath = path.join(outputDir, 'harness', 'sensors.json');
+    const sensorsPath = resolveRuntimeLayout(outputDir).sensorsFile;
     if (await fs.pathExists(sensorsPath) && await sensorCatalogNeedsFill(sensorsPath)) {
       files.push({
         path: sensorsPath,
-        relativePath: path.join('harness', 'sensors.json'),
+        relativePath: path.join('config', 'sensors.json'),
         type: 'sensor',
         documentName: 'sensors',
       });
@@ -185,7 +186,7 @@ function resolveScaffoldFileInfo(outputDir: string, filePath: string): ScaffoldF
     };
   }
 
-  if (segments[0] === 'harness' && segments[1] === 'sensors.json') {
+  if (segments[0] === 'config' && segments[1] === 'sensors.json') {
     return {
       path: resolvedFilePath,
       relativePath,
@@ -215,7 +216,7 @@ function getSkillFillInstructions(skillSlug: string): string {
 }
 
 function getSensorFillInstructions(): string {
-  return 'Review .context/harness/sensors.json and rewrite it as a project-specific sensor catalog. Keep the JSON schema valid, keep version at 1, set source to "manual", preserve stack metadata, and keep only commands that make sense for this repository.';
+  return 'Review .context/config/sensors.json and rewrite it as a project-specific sensor catalog. Keep the JSON schema valid, keep version at 1, set source to "manual", preserve stack metadata, and keep only commands that make sense for this repository.';
 }
 
 async function sensorCatalogNeedsFill(filePath: string): Promise<boolean> {
@@ -253,10 +254,10 @@ async function hasSkillContent(skillsDir: string): Promise<boolean> {
   }
 }
 
-async function hasHarnessRuntimeContent(harnessDir: string): Promise<boolean> {
-  const runtimeEntries = ['sessions', 'traces', 'artifacts', 'contracts', 'workflows', 'replays', 'datasets'];
+async function hasHarnessRuntimeContent(runtimeDir: string): Promise<boolean> {
+  const runtimeEntries = ['sessions', 'workflows', 'contracts', 'evaluations'];
   for (const entry of runtimeEntries) {
-    if (await hasContent(path.join(harnessDir, entry))) {
+    if (await hasContent(path.join(runtimeDir, entry))) {
       return true;
     }
   }
@@ -525,15 +526,16 @@ export const checkScaffoldingTool = createInternalTool<
 
     const outputDir = path.resolve(input.repoPath, '.context');
     try {
-      const sensorsPath = path.join(outputDir, 'harness', 'sensors.json');
+      const layout = resolveRuntimeLayout(outputDir);
+      const sensorsPath = layout.sensorsFile;
       const [initialized, docs, agents, skills, plans, workflow, harness, sensors] = await Promise.all([
         fs.pathExists(outputDir),
         fs.pathExists(path.join(outputDir, 'docs')).then((exists) => exists ? hasContent(path.join(outputDir, 'docs')) : false),
         fs.pathExists(path.join(outputDir, 'agents')).then((exists) => exists ? hasContent(path.join(outputDir, 'agents')) : false),
         fs.pathExists(path.join(outputDir, 'skills')).then((exists) => exists ? hasSkillContent(path.join(outputDir, 'skills')) : false),
         fs.pathExists(path.join(outputDir, 'plans')).then((exists) => exists ? hasContent(path.join(outputDir, 'plans')) : false),
-        fs.pathExists(path.join(outputDir, 'workflow')).then((exists) => exists ? hasContent(path.join(outputDir, 'workflow')) : false),
-        fs.pathExists(path.join(outputDir, 'harness')).then((exists) => exists ? hasHarnessRuntimeContent(path.join(outputDir, 'harness')) : false),
+        fs.pathExists(layout.workflowsDir).then((exists) => exists ? hasContent(layout.workflowsDir) : false),
+        fs.pathExists(layout.runtimeDir).then((exists) => exists ? hasHarnessRuntimeContent(layout.runtimeDir) : false),
         fs.pathExists(sensorsPath)
       ]);
 
@@ -740,7 +742,7 @@ export const initializeContextTool = createInternalTool<
       const sensorsPath = sensorCatalogService.configPath;
 
       const policyService = new HarnessPolicyService({ repoPath: resolvedRepoPath });
-      const policyPath = path.join(outputDir, 'harness', 'policy.json');
+      const policyPath = resolveRuntimeLayout(outputDir).policyFile;
       let policyGenerated = false;
       if (!await fs.pathExists(policyPath)) {
         await policyService.savePolicy(await policyService.createBootstrapPolicy());

@@ -31,7 +31,7 @@ The MCP tools follow a simple, explicit pattern:
 
 | Tool | Description |
 |------|-------------|
-| `workflow-init` | Initialize a PREVC workflow (creates `.context/workflow/`) |
+| `workflow-init` | Initialize a PREVC workflow (creates `.context/runtime/workflows/`) |
 | `workflow-status` | Get current workflow status |
 | `workflow-advance` | Advance to next phase |
 | `workflow-manage` | Manage handoffs, collaboration, documents, gates |
@@ -62,7 +62,7 @@ Do the template files have content?
 └─ Yes → Skip to Step 3
 
 Note: generated Q&A files in `.context/docs/qa/` are optional helper artifacts created only by `context({ action: "init", generateQA: true })`. They do not appear in `listToFill`/`fill` unless you create custom nested docs there with `status: unfilled`.
-Note: `.context/harness/sensors.json` is bootstrap-generated during `init` and can appear in `listToFill`/`fill` until it is customized for the project.
+Note: `.context/config/sensors.json` is bootstrap-generated during `init` and can appear in `listToFill`/`fill` until it is customized for the project.
 Note: `searchQA` performs keyword ranking over those generated helper docs. It is not embedding-based semantic search.
 ```
 
@@ -71,7 +71,7 @@ Note: `searchQA` performs keyword ranking over those generated helper docs. It i
 ```
 Do you need structured development?
 ├─ Yes → Use workflow-init({ name: "feature-name" })
-│   ├─ Creates .context/workflow/ folder
+│   ├─ Creates .context/runtime/workflows/ folder
 │   ├─ Initializes phase tracking
 │   └─ Configures gates based on scale
 └─ No → Start coding directly
@@ -103,7 +103,7 @@ Simplified Flow:
 | Tool | Creates |
 |------|---------|
 | `context({ action: "init" })` | `.context/docs/`, `.context/agents/`, `.context/skills/` |
-| `workflow-init({ name })` | `.context/workflow/` |
+| `workflow-init({ name })` | `.context/runtime/workflows/` |
 
 ## Removed Tools
 

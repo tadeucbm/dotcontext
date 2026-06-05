@@ -2,13 +2,18 @@
  * Harness Workflow State Service
  *
  * Canonical persistence for workflow orchestration state. PREVC status now
- * lives under .context/harness/workflows and legacy status.yaml is only read
+ * lives under .context/runtime/workflows and legacy status.yaml is only read
  * for migration.
  */
 
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import type { PrevcStatus } from '../../../domain/workflow/types';
+import { resolveRuntimeLayout, type RuntimeLayout } from '../../../../shared/fs/pathHelpers';
+import {
+  migrateLegacyContextLayout,
+  migrateLegacyContextLayoutSync,
+} from '../../../../shared/fs/legacyLayoutMigration';
 
 export interface HarnessWorkflowStateServiceOptions {
   contextPath: string;
@@ -37,23 +42,36 @@ export class HarnessWorkflowStateService {
     return path.resolve(this.options.contextPath);
   }
 
+  private get layout(): RuntimeLayout {
+    return resolveRuntimeLayout(this.contextPath);
+  }
+
   private get workflowsPath(): string {
-    return path.join(this.contextPath, 'harness', 'workflows');
+    return this.layout.workflowsDir;
   }
 
   private get currentPath(): string {
-    return path.join(this.workflowsPath, 'prevc.json');
+    return this.layout.prevcFile;
   }
 
   private get archivePath(): string {
-    return path.join(this.workflowsPath, 'archive');
+    return this.layout.workflowsArchiveDir;
   }
 
   private get legacyBindingPath(): string {
     return path.join(this.contextPath, 'workflow', 'harness-session.json');
   }
 
+  private async ensureMigrated(): Promise<void> {
+    await migrateLegacyContextLayout(this.contextPath);
+  }
+
+  private ensureMigratedSync(): void {
+    migrateLegacyContextLayoutSync(this.contextPath);
+  }
+
   private async ensureLayout(): Promise<void> {
+    await this.ensureMigrated();
     await fs.ensureDir(this.workflowsPath);
   }
 
@@ -142,14 +160,17 @@ export class HarnessWorkflowStateService {
   }
 
   async exists(): Promise<boolean> {
+    await this.ensureMigrated();
     return fs.pathExists(this.currentPath);
   }
 
   existsSync(): boolean {
+    this.ensureMigratedSync();
     return fs.existsSync(this.currentPath);
   }
 
   async loadRecord(): Promise<HarnessWorkflowRecord> {
+    await this.ensureMigrated();
     const raw = await fs.readJson(this.currentPath);
     const legacyBinding = await this.readLegacyBinding();
     const record = this.normalizeRecord(raw, legacyBinding);
@@ -171,6 +192,7 @@ export class HarnessWorkflowStateService {
   }
 
   loadRecordSync(): HarnessWorkflowRecord {
+    this.ensureMigratedSync();
     const raw = fs.readJsonSync(this.currentPath);
     const legacyBinding = this.readLegacyBindingSync();
     return this.normalizeRecord(raw, legacyBinding);

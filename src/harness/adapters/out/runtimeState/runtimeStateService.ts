@@ -2,12 +2,14 @@
  * Harness Runtime State Service
  *
  * Transport-agnostic persistence for sessions, artifacts, traces, and checkpoints.
- * The storage layout lives under .context/harness so future adapters can share state.
+ * State lives under .context/runtime/sessions, one folder per session, so future
+ * adapters can share it. Paths are resolved through the shared runtime layout.
  */
 
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { randomUUID } from 'crypto';
+import { resolveRuntimeLayout, type RuntimeLayout } from '../../../../shared/fs/pathHelpers';
 
 export type HarnessSessionStatus = 'active' | 'paused' | 'completed' | 'failed';
 export type HarnessTraceLevel = 'debug' | 'info' | 'warn' | 'error';
@@ -130,38 +132,33 @@ export class HarnessRuntimeStateService {
     return path.join(this.repoPath, '.context');
   }
 
-  private get harnessPath(): string {
-    return path.join(this.contextPath, 'harness');
+  private _layout?: RuntimeLayout;
+  private get layout(): RuntimeLayout {
+    return (this._layout ??= resolveRuntimeLayout(this.contextPath));
   }
 
   private get sessionsPath(): string {
-    return path.join(this.harnessPath, 'sessions');
-  }
-
-  private get tracesPath(): string {
-    return path.join(this.harnessPath, 'traces');
-  }
-
-  private get artifactsPath(): string {
-    return path.join(this.harnessPath, 'artifacts');
+    return this.layout.sessionsDir;
   }
 
   private sessionFile(sessionId: string): string {
-    return path.join(this.sessionsPath, `${sessionId}.json`);
+    return this.layout.sessionFile(sessionId);
   }
 
   private traceFile(sessionId: string): string {
-    return path.join(this.tracesPath, `${sessionId}.jsonl`);
+    return this.layout.sessionTraceFile(sessionId);
   }
 
   private artifactFile(sessionId: string, artifactId: string): string {
-    return path.join(this.artifactsPath, sessionId, `${artifactId}.json`);
+    return this.layout.sessionArtifactFile(sessionId, artifactId);
+  }
+
+  private async ensureSessionDir(sessionId: string): Promise<void> {
+    await fs.ensureDir(this.layout.sessionDir(sessionId));
   }
 
   private async ensureLayout(): Promise<void> {
     await fs.ensureDir(this.sessionsPath);
-    await fs.ensureDir(this.tracesPath);
-    await fs.ensureDir(this.artifactsPath);
   }
 
   private async readSession(sessionId: string): Promise<HarnessSessionRecord> {
@@ -174,12 +171,12 @@ export class HarnessRuntimeStateService {
   }
 
   private async saveSession(session: HarnessSessionRecord): Promise<void> {
-    await this.ensureLayout();
+    await this.ensureSessionDir(session.id);
     await fs.writeJson(this.sessionFile(session.id), session, { spaces: 2 });
   }
 
   private async appendTraceLine(sessionId: string, trace: HarnessTraceRecord): Promise<void> {
-    await this.ensureLayout();
+    await this.ensureSessionDir(sessionId);
     await fs.appendFile(this.traceFile(sessionId), `${JSON.stringify(trace)}\n`, 'utf8');
   }
 
@@ -228,12 +225,20 @@ export class HarnessRuntimeStateService {
 
   async listSessions(): Promise<HarnessSessionRecord[]> {
     await this.ensureLayout();
-    const entries = await fs.readdir(this.sessionsPath);
-    const sessions = await Promise.all(
-      entries
-        .filter((entry) => entry.endsWith('.json'))
-        .map(async (entry) => fs.readJson(path.join(this.sessionsPath, entry)) as Promise<HarnessSessionRecord>)
-    );
+    const entries = await fs.readdir(this.sessionsPath, { withFileTypes: true });
+    const sessions: HarnessSessionRecord[] = [];
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+      try {
+        const file = this.sessionFile(entry.name);
+        sessions.push((await fs.readJson(file)) as HarnessSessionRecord);
+      } catch {
+        // Skip sessions with missing or unparseable session.json.
+        continue;
+      }
+    }
 
     return sessions.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   }
@@ -300,17 +305,21 @@ export class HarnessRuntimeStateService {
   }
 
   async listArtifacts(sessionId: string): Promise<HarnessArtifactRecord[]> {
-    const dir = path.join(this.artifactsPath, sessionId);
+    const dir = this.layout.sessionArtifactsDir(sessionId);
     if (!(await fs.pathExists(dir))) {
       return [];
     }
 
     const entries = await fs.readdir(dir);
-    const artifacts = await Promise.all(
-      entries
-        .filter((entry) => entry.endsWith('.json'))
-        .map(async (entry) => fs.readJson(path.join(dir, entry)) as Promise<HarnessArtifactRecord>)
-    );
+    const artifacts: HarnessArtifactRecord[] = [];
+    for (const entry of entries.filter((entry) => entry.endsWith('.json'))) {
+      try {
+        artifacts.push((await fs.readJson(path.join(dir, entry))) as HarnessArtifactRecord);
+      } catch {
+        // Skip missing or unparseable artifact files.
+        continue;
+      }
+    }
 
     return artifacts.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   }
@@ -326,7 +335,14 @@ export class HarnessRuntimeStateService {
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)
-      .map((line) => JSON.parse(line) as HarnessTraceRecord);
+      .flatMap((line) => {
+        try {
+          return [JSON.parse(line) as HarnessTraceRecord];
+        } catch {
+          // Drop malformed/partially-written trace lines.
+          return [];
+        }
+      });
   }
 
   async checkpointSession(sessionId: string, input: CheckpointInput = {}): Promise<HarnessSessionRecord> {

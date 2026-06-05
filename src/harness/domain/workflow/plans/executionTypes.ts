@@ -1,7 +1,7 @@
 /**
  * Plan Execution Tracking Types
  *
- * The tracking JSON under `.context/workflow/plan-tracking/{slug}.json` is the
+ * The tracking JSON under `.context/runtime/workflows/plan-tracking/{slug}.json` is the
  * canonical runtime source of truth. Markdown files are read-only projections.
  * These types describe the tracking document; document-shape types live in
  * `types.ts`.
@@ -67,7 +67,7 @@ export interface PlanPhaseTracking {
 
 /**
  * Canonical plan execution tracking record.
- * Stored in `.context/workflow/plan-tracking/{slug}.json`.
+ * Stored in `.context/runtime/workflows/plan-tracking/{slug}.json`.
  */
 export interface PlanExecutionTracking {
   planSlug: string;

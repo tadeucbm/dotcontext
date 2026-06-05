@@ -43,7 +43,7 @@ describe('contextTools sensors scaffolding', () => {
       toolExecutionContext
     ) as Record<string, any>;
 
-    const sensorsPath = path.join(tempDir, '.context', 'harness', 'sensors.json');
+    const sensorsPath = path.join(tempDir, '.context', 'config', 'sensors.json');
 
     expect(result.pendingWrites.some((item: { filePath: string }) => item.filePath === sensorsPath)).toBe(true);
 
@@ -56,7 +56,7 @@ describe('contextTools sensors scaffolding', () => {
     ) as Record<string, any>;
 
     expect(listed.files).toHaveLength(1);
-    expect(listed.files[0].relativePath).toBe(path.join('harness', 'sensors.json'));
+    expect(listed.files[0].relativePath).toBe(path.join('config', 'sensors.json'));
     expect(listed.files[0].type).toBe('sensor');
   });
 
@@ -86,7 +86,7 @@ describe('contextTools sensors scaffolding', () => {
       toolExecutionContext
     );
 
-    const policy = await fs.readJson(path.join(tempDir, '.context', 'harness', 'policy.json'));
+    const policy = await fs.readJson(path.join(tempDir, '.context', 'config', 'policy.json'));
     const protectedPaths = policy.rules
       .flatMap((rule: { when?: { paths?: string[] } }) => rule.when?.paths ?? []);
 
@@ -105,7 +105,7 @@ describe('contextTools sensors scaffolding', () => {
       toolExecutionContext
     );
 
-    const sensorsPath = path.join(tempDir, '.context', 'harness', 'sensors.json');
+    const sensorsPath = path.join(tempDir, '.context', 'config', 'sensors.json');
     const result = await fillSingleFileTool.execute!(
       {
         repoPath: tempDir,
@@ -132,7 +132,7 @@ describe('contextTools sensors scaffolding', () => {
       toolExecutionContext
     );
 
-    const sensorsPath = path.join(tempDir, '.context', 'harness', 'sensors.json');
+    const sensorsPath = path.join(tempDir, '.context', 'config', 'sensors.json');
     const catalog = await fs.readJson(sensorsPath);
     catalog.source = 'manual';
     await fs.writeJson(sensorsPath, catalog, { spaces: 2 });

@@ -155,12 +155,12 @@ export class AIContextMCPServer {
 - check: Check if .context scaffolding exists (params: repoPath?)
 - bootstrapStatus: Summarize scaffold, workflow, and harness bootstrap readiness (params: repoPath?)
 - init: Initialize .context scaffolding (params: repoPath?, type?, outputDir?, semantic?, autoFill?, skipContentGeneration?, generateQA?) Q&A helper docs are opt-in.
-- fill: Fill scaffolding with AI content (params: repoPath?, outputDir?, target?, offset?, limit?) Generated Q&A helper docs under .context/docs/qa are only created when generateQA is enabled and are not returned unless you add custom unfilled docs there. Bootstrap .context/harness/sensors.json is returned until customized.
+- fill: Fill scaffolding with AI content (params: repoPath?, outputDir?, target?, offset?, limit?) Generated Q&A helper docs under .context/docs/qa are only created when generateQA is enabled and are not returned unless you add custom unfilled docs there. Bootstrap .context/config/sensors.json is returned until customized.
 - fillSingle: Fill a single scaffold file (params: repoPath?, filePath)
 - listToFill: List files that need filling (params: repoPath?, outputDir?, target?)
 - getMap: Get codebase map section with on-read auto-refresh (params: repoPath?, section?)
 - buildSemantic: Build semantic context (params: repoPath?, contextType?, targetFile?, options?)
-- scaffoldPlan: Create a plan template (params: planName, repoPath?, title?, summary?, autoFill?) Plan creation does NOT start execution. For non-trivial work, immediately follow with workflow-init so PREVC starts on the harness and persists state under .context/harness/workflows/prevc.json.
+- scaffoldPlan: Create a plan template (params: planName, repoPath?, title?, summary?, autoFill?) Plan creation does NOT start execution. For non-trivial work, immediately follow with workflow-init so PREVC starts on the harness and persists state under .context/runtime/workflows/prevc.json.
 - searchQA: Search generated Q&A helper docs with keyword ranking (params: repoPath?, query)
 - generateQA: Generate optional Q&A helper docs from the codebase (params: repoPath?, options?)
 - getFlow: Trace a code path from an entry file/function (params: repoPath?, entryFile, entryFunction?, options?)
@@ -239,10 +239,10 @@ export class AIContextMCPServer {
     this.server.registerTool('workflow-init', {
       description: `Initialize a PREVC workflow for structured development.
 
-This is the harness-backed entry point for planned work. If the user asked to create a plan for non-trivial work, do not stop at scaffoldPlan: call workflow-init so the plan runs under PREVC with canonical state in .context/harness/workflows/prevc.json.
+This is the harness-backed entry point for planned work. If the user asked to create a plan for non-trivial work, do not stop at scaffoldPlan: call workflow-init so the plan runs under PREVC with canonical state in .context/runtime/workflows/prevc.json.
 
 **What it does:**
-- Creates .context/workflow/ folder (automatically, if it doesn't exist)
+- Creates .context/runtime/workflows/ folder (automatically, if it doesn't exist)
 - Initializes workflow status file with phase tracking
 - Creates canonical harness workflow state and session binding
 - Detects project scale and configures gates

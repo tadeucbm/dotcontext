@@ -76,7 +76,7 @@ describe('handleContext', () => {
     expect(payload.success).toBe(true);
     expect(payload._actionRequired).toBe(true);
     expect(payload.enhancementPrompt).toContain('workflow-init({ name: "feature-rollout" })');
-    expect(payload.enhancementPrompt).toContain('.context/harness/workflows/prevc.json');
+    expect(payload.enhancementPrompt).toContain('.context/runtime/workflows/prevc.json');
     expect(payload.nextSteps).toContain(
       'REQUIRED: Call workflow-init({ name: "feature-rollout" }) to start the harness-backed PREVC workflow'
     );

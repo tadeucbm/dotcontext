@@ -9,6 +9,7 @@ import type {
   HarnessTraceRecord,
   HarnessRuntimeStatePort,
 } from '../../adapters/out/runtimeState/runtimeStateService';
+import { resolveRuntimeLayoutFromRepo } from '../../../shared/fs/pathHelpers';
 import { HarnessRuntimeStateService as DefaultHarnessRuntimeStateService } from '../../adapters/out/runtimeState/runtimeStateService';
 import { HarnessSensorsService, type HarnessSensorRun } from '../sensors/sensorsService';
 import {
@@ -104,7 +105,7 @@ export class HarnessReplayService {
   }
 
   private get replaysPath(): string {
-    return path.join(this.repoPath, '.context', 'harness', 'replays');
+    return resolveRuntimeLayoutFromRepo(this.repoPath).replaysDir;
   }
 
   private replayFile(replayId: string): string {

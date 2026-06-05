@@ -2,6 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { randomUUID } from 'crypto';
 
+import { resolveRuntimeLayoutFromRepo } from '../../../shared/fs/pathHelpers';
 import { HarnessRuntimeStateService, type HarnessRuntimeStatePort } from '../../adapters/out/runtimeState/runtimeStateService';
 import { HarnessReplayService, type HarnessReplayRecord } from '../replay/replayService';
 import { HarnessSensorsService } from '../sensors/sensorsService';
@@ -238,7 +239,7 @@ export class HarnessDatasetService {
   }
 
   private get datasetsPath(): string {
-    return path.join(this.repoPath, '.context', 'harness', 'datasets');
+    return resolveRuntimeLayoutFromRepo(this.repoPath).datasetsDir;
   }
 
   private datasetFile(datasetId: string): string {

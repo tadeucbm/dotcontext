@@ -150,7 +150,7 @@ export class PrevcOrchestrator {
   }
 
   /**
-   * Archive the current workflow to .context/workflow/archive/
+   * Archive the current workflow to .context/runtime/workflows/archive/
    */
   private async archiveCurrentWorkflow(): Promise<void> {
     if (!(await this.statusManager.exists())) {

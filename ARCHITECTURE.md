@@ -28,13 +28,13 @@ flowchart LR
     H --> RP["Replay Service"]
     H --> DS["Failure Dataset Builder"]
 
-    RS --> Store[".context/harness/*"]
+    RS --> Store[".context/runtime/*"]
     WF --> Store
     QC --> Store
     TC --> Store
     RP --> Store
     DS --> Store
-    PO --> Policy[".context/harness/policy.json"]
+    PO --> Policy[".context/config/policy.json"]
 ```
 
 ## Consolidated Boundaries
@@ -82,7 +82,7 @@ Hook-based integrations should use `HarnessHookAdapter.handle(event)`. The event
 
 ### 1. Runtime State
 
-The harness persists durable execution state under `.context/harness`.
+The harness persists durable execution state under `.context/runtime` and authored config (policy, sensors) under `.context/config`.
 
 - sessions
 - traces

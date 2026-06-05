@@ -48,7 +48,7 @@ export function resolveContextPaths(repoPath: string): ContextPaths {
     agentsPath: path.join(contextPath, 'agents'),
     plansPath: path.join(contextPath, 'plans'),
     rulesPath: path.join(contextPath, 'rules'),
-    workflowPath: path.join(contextPath, 'workflow'),
+    workflowPath: path.join(contextPath, 'runtime', 'workflows'),
   };
 }
 
@@ -71,11 +71,112 @@ export async function resolveContextPathsAsync(
     agentsPath: path.join(resolution.contextPath, 'agents'),
     plansPath: path.join(resolution.contextPath, 'plans'),
     rulesPath: path.join(resolution.contextPath, 'rules'),
-    workflowPath: path.join(resolution.contextPath, 'workflow'),
+    workflowPath: path.join(resolution.contextPath, 'runtime', 'workflows'),
     resolution,
   };
 
   return paths;
+}
+
+/**
+ * On-disk layout for authored config and machine-generated runtime state.
+ *
+ * Authored config lives under `.context/config` (version-controlled when
+ * customized). All generated state lives under `.context/runtime` and is
+ * gitignored as a single block. This is the single source of truth for these
+ * paths — services must resolve through here rather than joining `'harness'`
+ * or `'workflow'` segments by hand.
+ *
+ * Note: this concerns only the DATA folder on disk. The `src/harness` code
+ * module keeps its name; the runtime it writes is what lives under `runtime/`.
+ */
+export interface RuntimeLayout {
+  /** `.context/config` — authored, version-controlled config */
+  configDir: string;
+  /** `.context/config/policy.json` */
+  policyFile: string;
+  /** `.context/config/sensors.json` */
+  sensorsFile: string;
+  /** `.context/runtime` — all generated state, gitignored */
+  runtimeDir: string;
+  /** `.context/runtime/sessions` */
+  sessionsDir: string;
+  /** `.context/runtime/workflows` */
+  workflowsDir: string;
+  /** `.context/runtime/workflows/prevc.json` */
+  prevcFile: string;
+  /** `.context/runtime/workflows/archive` */
+  workflowsArchiveDir: string;
+  /** `.context/runtime/workflows/collaboration-sessions.json` */
+  collaborationFile: string;
+  /** `.context/runtime/contracts` */
+  contractsDir: string;
+  /** `.context/runtime/contracts/tasks` */
+  contractTasksDir: string;
+  /** `.context/runtime/contracts/handoffs` */
+  contractHandoffsDir: string;
+  /** `.context/runtime/evaluations` */
+  evaluationsDir: string;
+  /** `.context/runtime/evaluations/replays` */
+  replaysDir: string;
+  /** `.context/runtime/evaluations/datasets` */
+  datasetsDir: string;
+  /** `.context/runtime/sessions/<id>` */
+  sessionDir(sessionId: string): string;
+  /** `.context/runtime/sessions/<id>/session.json` */
+  sessionFile(sessionId: string): string;
+  /** `.context/runtime/sessions/<id>/trace.jsonl` */
+  sessionTraceFile(sessionId: string): string;
+  /** `.context/runtime/sessions/<id>/artifacts` */
+  sessionArtifactsDir(sessionId: string): string;
+  /** `.context/runtime/sessions/<id>/artifacts/<artifactId>.json` */
+  sessionArtifactFile(sessionId: string, artifactId: string): string;
+}
+
+/**
+ * Resolve the full config + runtime layout from a `.context` path.
+ * Pass the `.context` directory itself (use `resolveRuntimeLayoutFromRepo` when
+ * you only have a repo root).
+ */
+export function resolveRuntimeLayout(contextPath: string): RuntimeLayout {
+  const resolved = path.resolve(contextPath);
+  const configDir = path.join(resolved, 'config');
+  const runtimeDir = path.join(resolved, 'runtime');
+  const sessionsDir = path.join(runtimeDir, 'sessions');
+  const workflowsDir = path.join(runtimeDir, 'workflows');
+  const contractsDir = path.join(runtimeDir, 'contracts');
+  const evaluationsDir = path.join(runtimeDir, 'evaluations');
+
+  return {
+    configDir,
+    policyFile: path.join(configDir, 'policy.json'),
+    sensorsFile: path.join(configDir, 'sensors.json'),
+    runtimeDir,
+    sessionsDir,
+    workflowsDir,
+    prevcFile: path.join(workflowsDir, 'prevc.json'),
+    workflowsArchiveDir: path.join(workflowsDir, 'archive'),
+    collaborationFile: path.join(workflowsDir, 'collaboration-sessions.json'),
+    contractsDir,
+    contractTasksDir: path.join(contractsDir, 'tasks'),
+    contractHandoffsDir: path.join(contractsDir, 'handoffs'),
+    evaluationsDir,
+    replaysDir: path.join(evaluationsDir, 'replays'),
+    datasetsDir: path.join(evaluationsDir, 'datasets'),
+    sessionDir: (sessionId: string) => path.join(sessionsDir, sessionId),
+    sessionFile: (sessionId: string) => path.join(sessionsDir, sessionId, 'session.json'),
+    sessionTraceFile: (sessionId: string) => path.join(sessionsDir, sessionId, 'trace.jsonl'),
+    sessionArtifactsDir: (sessionId: string) => path.join(sessionsDir, sessionId, 'artifacts'),
+    sessionArtifactFile: (sessionId: string, artifactId: string) =>
+      path.join(sessionsDir, sessionId, 'artifacts', `${artifactId}.json`),
+  };
+}
+
+/**
+ * Resolve the config + runtime layout from a repository root (joins `.context`).
+ */
+export function resolveRuntimeLayoutFromRepo(repoPath: string): RuntimeLayout {
+  return resolveRuntimeLayout(path.join(path.resolve(repoPath), '.context'));
 }
 
 /**

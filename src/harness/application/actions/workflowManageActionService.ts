@@ -122,7 +122,7 @@ export class HarnessWorkflowManageActionService {
           return noWorkflowResponse();
         }
 
-        const docPath = `.context/workflow/docs/${params.type}-${params.docName?.toLowerCase().replace(/\s+/g, '-')}.md`;
+        const docPath = `.context/runtime/workflows/docs/${params.type}-${params.docName?.toLowerCase().replace(/\s+/g, '-')}.md`;
 
         return {
           success: true,

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Reorganized the on-disk `.context` data layout** into authored config vs generated runtime state. The single `.context/harness/` folder (which mixed editable config with machine-generated state) and the separate `.context/workflow/` folder are replaced by:
+  - `.context/config/` — authored, version-controlled config: `policy.json`, `sensors.json` (moved from `.context/harness/`)
+  - `.context/runtime/` — all generated state, gitignored as one block:
+    - `runtime/sessions/<id>/` — one folder per session co-locating `session.json`, `trace.jsonl`, and `artifacts/` (previously flat under `harness/sessions`, `harness/traces`, `harness/artifacts`)
+    - `runtime/workflows/` — PREVC state (`prevc.json`), plan tracking (`plans.json`, `plan-tracking/`), and `collaboration-sessions.json` (previously split across `harness/workflows` and `workflow/`)
+    - `runtime/contracts/` — task and handoff contracts (was `harness/contracts`)
+    - `runtime/evaluations/{replays,datasets}/` — replay and failure-dataset output (was `harness/replays`, `harness/datasets`)
+  - All paths now resolve through a single source of truth (`resolveRuntimeLayout` in `src/shared/fs/pathHelpers.ts`) instead of hand-built `'harness'`/`'workflow'` path segments.
+  - Durable artifacts (config + workflow state) are migrated automatically on first access via `migrateLegacyContextLayout`; ephemeral state regenerates. Legacy `.context/harness/` and `.context/workflow/` remain gitignored for un-migrated checkouts. The `src/harness` code module is unchanged — only the on-disk data folder moved.
+  - Task and handoff contracts are migrated too (they are durable: `prevc.json` bindings reference task contracts by id, so contracts must travel with the workflow state).
+  - Migration is best-effort: failures never block normal operation (they log a warning and retry on a later access), and a divergence — both legacy and new locations holding data — leaves the new location untouched (it wins) with a one-time warning.
+  - A layering test now forbids `src/harness/domain` code from importing the migration shim (`src/shared/fs/legacyLayoutMigration`) or the application/adapters layers, keeping the domain decoupled from migration concerns.
+
 ### Added
 
 - **Built-in `tests-passing` sensor** (`src/services/harness/sensors/testsPassing.ts`)

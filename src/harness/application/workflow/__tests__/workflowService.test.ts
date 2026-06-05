@@ -44,7 +44,7 @@ describe('WorkflowService harness integration', () => {
     expect(harness?.session.status).toBe('active');
     expect(binding?.sessionId).toBe(harness?.session.id);
     expect(binding?.workflowName).toBe('alpha');
-    expect(await fs.pathExists(path.join(tempDir, '.context', 'harness', 'workflows', 'prevc.json'))).toBe(true);
+    expect(await fs.pathExists(path.join(tempDir, '.context', 'runtime', 'workflows', 'prevc.json'))).toBe(true);
     expect(await fs.pathExists(path.join(tempDir, '.context', 'workflow', 'status.yaml'))).toBe(false);
   });
 
@@ -105,7 +105,7 @@ describe('WorkflowService harness integration', () => {
 
     const synthesis = await reloadedService.endCollaboration(sessionId);
     const persisted = await fs.readJson(
-      path.join(tempDir, '.context', 'workflow', 'collaboration-sessions.json')
+      path.join(tempDir, '.context', 'runtime', 'workflows', 'collaboration-sessions.json')
     );
 
     expect(synthesis).not.toBeNull();
@@ -299,9 +299,9 @@ phases:
   });
 
   it('loads customizable sensors from .context/harness/sensors.json', async () => {
-    await fs.ensureDir(path.join(tempDir, '.context', 'harness'));
+    await fs.ensureDir(path.join(tempDir, '.context', 'config'));
     await fs.writeJson(
-      path.join(tempDir, '.context', 'harness', 'sensors.json'),
+      path.join(tempDir, '.context', 'config', 'sensors.json'),
       {
         version: 1,
         generatedAt: new Date().toISOString(),
@@ -340,9 +340,9 @@ phases:
       autonomous: true,
     });
 
-    await fs.ensureDir(path.join(tempDir, '.context', 'harness'));
+    await fs.ensureDir(path.join(tempDir, '.context', 'config'));
     await fs.writeJson(
-      path.join(tempDir, '.context', 'harness', 'policy.json'),
+      path.join(tempDir, '.context', 'config', 'policy.json'),
       {
         version: 1,
         defaultEffect: 'allow',
@@ -376,9 +376,9 @@ phases:
       autonomous: true,
     });
 
-    await fs.ensureDir(path.join(tempDir, '.context', 'harness'));
+    await fs.ensureDir(path.join(tempDir, '.context', 'config'));
     await fs.writeJson(
-      path.join(tempDir, '.context', 'harness', 'policy.json'),
+      path.join(tempDir, '.context', 'config', 'policy.json'),
       {
         version: 1,
         defaultEffect: 'allow',

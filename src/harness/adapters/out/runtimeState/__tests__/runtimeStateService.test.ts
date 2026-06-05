@@ -71,9 +71,9 @@ describe('HarnessRuntimeStateService', () => {
     expect(artifacts).toHaveLength(1);
     expect(artifacts[0].content).toBe('hello world');
 
-    const sessionFile = path.join(tempDir, '.context', 'harness', 'sessions', `${session.id}.json`);
-    const traceFile = path.join(tempDir, '.context', 'harness', 'traces', `${session.id}.jsonl`);
-    const artifactFile = path.join(tempDir, '.context', 'harness', 'artifacts', session.id);
+    const sessionFile = path.join(tempDir, '.context', 'runtime', 'sessions', session.id, 'session.json');
+    const traceFile = path.join(tempDir, '.context', 'runtime', 'sessions', session.id, 'trace.jsonl');
+    const artifactFile = path.join(tempDir, '.context', 'runtime', 'sessions', session.id, 'artifacts');
 
     expect(await fs.pathExists(sessionFile)).toBe(true);
     expect(await fs.pathExists(traceFile)).toBe(true);

@@ -3,6 +3,10 @@ import * as path from 'path';
 
 const SRC_ROOT = path.resolve(__dirname, '..', '..', '..');
 const INTEGRATIONS_ROOT = path.join(SRC_ROOT, 'integrations');
+const HARNESS_DOMAIN_ROOT = path.join(SRC_ROOT, 'harness', 'domain');
+const HARNESS_APPLICATION_ROOT = path.join(SRC_ROOT, 'harness', 'application');
+const HARNESS_ADAPTERS_ROOT = path.join(SRC_ROOT, 'harness', 'adapters');
+const MIGRATION_SHIM = path.join(SRC_ROOT, 'shared', 'fs', 'legacyLayoutMigration');
 const FORBIDDEN_INTEGRATION_ROOTS = [
   path.join(SRC_ROOT, 'cli'),
   path.join(SRC_ROOT, 'mcp'),
@@ -128,6 +132,29 @@ function isForbiddenIntegrationImport(reference: ImportReference): boolean {
     );
 }
 
+/**
+ * Resolve an import reference to an on-disk path for boundary checks.
+ *
+ * Relative specifiers are already resolved by `getImportReferences`. Bare
+ * specifiers are resolved against the `src` baseUrl (matching tsconfig), which
+ * is how a domain file could otherwise reach `shared/fs/legacyLayoutMigration`
+ * or `harness/application/...` without a leading `./`.
+ */
+function resolveReferencePath(reference: ImportReference): string | undefined {
+  if (reference.resolvedPath) {
+    return reference.resolvedPath;
+  }
+  if (reference.specifier.startsWith('@') || !reference.specifier.includes('/')) {
+    return undefined;
+  }
+  return path.resolve(SRC_ROOT, reference.specifier);
+}
+
+/** True when the (extension-stripped) resolved path equals the migration shim. */
+function isMigrationShim(resolved: string): boolean {
+  return resolved.replace(/\.(ts|js)$/, '') === MIGRATION_SHIM;
+}
+
 function isHarnessIntegrationImport(reference: ImportReference): boolean {
   if (
     reference.specifier === 'integrations' ||
@@ -201,6 +228,73 @@ describe('architecture boundaries', () => {
     if (violations.length > 0) {
       throw new Error(
         `Harness modules must not import host integrations.\n\n${formatViolations(violations)}`
+      );
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it('domain layer must not import the legacy-layout migration shim', () => {
+    // The migration shim performs filesystem mutation (I/O). The domain layer
+    // must never trigger it — migration is an application/adapter concern.
+    // Importing the PURE path helper (src/shared/fs/pathHelpers) is allowed.
+    const files = walk(HARNESS_DOMAIN_ROOT);
+    expect(files.length).toBeGreaterThan(0);
+
+    const violations = files.flatMap(getImportReferences).filter((reference) => {
+      const resolved = resolveReferencePath(reference);
+      return resolved ? isMigrationShim(resolved) : false;
+    });
+
+    if (violations.length > 0) {
+      throw new Error(
+        'src/harness/domain must not import the migration shim ' +
+          `(src/shared/fs/legacyLayoutMigration).\n\n${formatViolations(violations)}`
+      );
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it('domain layer does not add new imports of application/adapters (ratchet)', () => {
+    // Pre-existing domain -> application/adapters imports inherited from the
+    // hexagonal refactor (commits 338d7a7, c9b1386), mostly type-only. They are
+    // frozen here so this test fails on any NEW violation while the known debt
+    // is paid down separately. Do not extend this list — relocate shared types
+    // into the domain instead.
+    const KNOWN_DEBT = new Set([
+      'harness/domain/policies/index.ts',
+      'harness/domain/sensors/index.ts',
+      'harness/domain/workflow/orchestrator.ts',
+      'harness/domain/workflow/plans/planLinkerParser.ts',
+      'harness/domain/workflow/plans/types.ts',
+      'harness/domain/workflow/skills/skillTemplates.ts',
+      'harness/domain/workflow/status/statusManager.ts',
+    ]);
+
+    const files = walk(HARNESS_DOMAIN_ROOT);
+    expect(files.length).toBeGreaterThan(0);
+
+    const violations = files.flatMap(getImportReferences).filter((reference) => {
+      const resolved = resolveReferencePath(reference);
+      if (!resolved) {
+        return false;
+      }
+      if (
+        !isInside(resolved, HARNESS_APPLICATION_ROOT) &&
+        !isInside(resolved, HARNESS_ADAPTERS_ROOT)
+      ) {
+        return false;
+      }
+      const relative = path.relative(SRC_ROOT, reference.file).split(path.sep).join('/');
+      return !KNOWN_DEBT.has(relative);
+    });
+
+    if (violations.length > 0) {
+      throw new Error(
+        'New src/harness/domain -> application/adapters import detected. Domain ' +
+          'must own its types; relocate them instead of importing upward.\n\n' +
+          formatViolations(violations)
       );
     }
 

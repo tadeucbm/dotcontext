@@ -5,7 +5,7 @@
  * pure transition helpers, and a legacy YAML migrator.
  *
  * No in-memory cache is maintained: canonical state lives in a single small
- * JSON file under `.context/harness/workflows/`, reads are cheap, and an
+ * JSON file under `.context/runtime/workflows/`, reads are cheap, and an
  * mtime-based cache would add invalidation complexity that loses value once
  * multiple processes (MCP + CLI) can write concurrently. If profiling ever
  * shows read contention, reintroduce caching keyed on the canonical file's

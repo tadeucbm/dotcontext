@@ -13,6 +13,8 @@ import { createPlanLinker, type LinkedPlan } from '../../domain/workflow/plans';
 import { ROLE_DISPLAY_NAMES } from '../../domain/workflow/roles';
 import { getScaleName, getScaleFromName } from '../../domain/workflow/scaling';
 import { PrevcOrchestrator, type WorkflowSummary } from '../../domain/workflow/orchestrator';
+import { resolveRuntimeLayout } from '../../../shared/fs/pathHelpers';
+import { migrateLegacyContextLayoutSync } from '../../../shared/fs/legacyLayoutMigration';
 import {
   PrevcStatus,
   PrevcPhase,
@@ -108,6 +110,7 @@ export class WorkflowService {
     this.contextPath = path.basename(resolvedPath) === '.context'
       ? resolvedPath
       : path.join(resolvedPath, '.context');
+    migrateLegacyContextLayoutSync(this.contextPath);
     this.harness = new HarnessSessionFacade({
       repoPath: this.repoPath,
       contextPath: this.contextPath,
@@ -160,7 +163,7 @@ export class WorkflowService {
 
     // Ensure .context directory exists
     await fs.ensureDir(this.contextPath);
-    await fs.ensureDir(path.join(this.contextPath, 'workflow'));
+    await fs.ensureDir(resolveRuntimeLayout(this.contextPath).workflowsDir);
 
     // Determine scale
     let scale: ProjectScale;

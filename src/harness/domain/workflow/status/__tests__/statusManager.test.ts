@@ -28,7 +28,7 @@ describe('PrevcStatusManager canonical persistence', () => {
       scale: ProjectScale.SMALL,
     });
 
-    const canonicalPath = path.join(contextPath, 'harness', 'workflows', 'prevc.json');
+    const canonicalPath = path.join(contextPath, 'runtime', 'workflows', 'prevc.json');
     const projectionPath = path.join(contextPath, 'workflow', 'status.yaml');
 
     expect(created.project.name).toBe('canonical-alpha');
@@ -73,7 +73,7 @@ describe('PrevcStatusManager canonical persistence', () => {
     ].join('\n'), 'utf-8');
 
     const loaded = await manager.load();
-    const canonicalPath = path.join(contextPath, 'harness', 'workflows', 'prevc.json');
+    const canonicalPath = path.join(contextPath, 'runtime', 'workflows', 'prevc.json');
 
     expect(loaded.project.name).toBe('legacy-alpha');
     expect(await fs.pathExists(canonicalPath)).toBe(true);
