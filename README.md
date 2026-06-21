@@ -431,7 +431,7 @@ npm run build
 
 ## MCP Tools
 
-The MCP adapter currently exposes 11 tools: 7 action-based gateways plus 4 dedicated workflow entry points.
+The MCP adapter currently exposes 12 tools: 7 action-based gateways plus 5 dedicated workflow entry points.
 
 ### Action Gateways
 
@@ -455,6 +455,7 @@ The MCP adapter currently exposes 11 tools: 7 action-based gateways plus 4 dedic
 | --- | --- |
 | `workflow-init` | Initialize a PREVC workflow with scale detection, gates, and harness session binding |
 | `workflow-status` | Read current workflow status, phases, linked plans, and active harness task contract |
+| `workflow-guide` | Read adapter-neutral next steps, relevant skills, and portable gate decision hints |
 | `workflow-advance` | Advance to the next PREVC phase with gate checking and task-contract rotation |
 | `workflow-manage` | Manage handoffs, collaboration, workflow docs, gates, approvals, artifacts, checkpoints, manual contracts, and sensor runs |
 

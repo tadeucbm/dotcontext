@@ -32,6 +32,7 @@ import {
 import {
   HarnessWorkflowActionService,
   type HarnessWorkflowAdvanceInput,
+  type HarnessWorkflowGuideInput,
   type HarnessWorkflowInitInput,
   type HarnessWorkflowStatusInput,
 } from './workflowActionService';
@@ -50,6 +51,7 @@ export type HarnessAdapterToolName =
   | 'harness'
   | 'workflow-init'
   | 'workflow-status'
+  | 'workflow-guide'
   | 'workflow-advance'
   | 'workflow-manage';
 
@@ -63,6 +65,7 @@ export type HarnessAdapterInput =
   | HarnessActionInput
   | HarnessWorkflowInitInput
   | HarnessWorkflowStatusInput
+  | HarnessWorkflowGuideInput
   | HarnessWorkflowAdvanceInput
   | HarnessWorkflowManageActionInput;
 
@@ -138,6 +141,12 @@ export class HarnessAdapterRuntime {
           kind: 'json',
           data: await new HarnessWorkflowActionService(this.options)
             .status(request.params as HarnessWorkflowStatusInput),
+        };
+      case 'workflow-guide':
+        return {
+          kind: 'json',
+          data: await new HarnessWorkflowActionService(this.options)
+            .guide(request.params as HarnessWorkflowGuideInput),
         };
       case 'workflow-advance':
         return {

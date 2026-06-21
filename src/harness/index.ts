@@ -74,6 +74,7 @@ export {
   type HarnessWorkflowActionServiceOptions,
   type HarnessWorkflowInitInput,
   type HarnessWorkflowStatusInput,
+  type HarnessWorkflowGuideInput,
   type HarnessWorkflowAdvanceInput,
   type HarnessWorkflowActionResult,
   HarnessAgentsService,

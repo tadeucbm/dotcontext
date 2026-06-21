@@ -38,6 +38,7 @@ import {
 } from '../mcp';
 import {
   WorkflowService,
+  HarnessWorkflowActionService,
   type WorkflowServiceDependencies,
   getScaleName,
   PHASE_NAMES_PT,
@@ -635,6 +636,38 @@ function registerWorkflowCommands(parent: Command, hidden = false): Command {
         }
       } catch (error) {
         ui.displayError('Failed to get workflow status', error as Error);
+        process.exit(1);
+      }
+    });
+
+  workflowCommand
+    .command('guide')
+    .description('Show adapter-neutral workflow guidance')
+    .option('-r, --repo-path <path>', 'Repository path', process.cwd())
+    .option('--intent <intent>', 'Intent: session_start, pre_edit, post_edit, session_end, explicit', 'explicit')
+    .option('--format <format>', 'Excerpt format: compact or full', 'compact')
+    .option('--json', 'Output as JSON')
+    .action(async (options: any) => {
+      try {
+        const service = new HarnessWorkflowActionService({ repoPath: options.repoPath });
+        const result = await service.guide({
+          repoPath: options.repoPath,
+          intent: options.intent,
+          format: options.format,
+        });
+
+        if (options.json) {
+          console.log(JSON.stringify(result, null, 2));
+          return;
+        }
+
+        if (typeof result.excerpt === 'string') {
+          console.log(result.excerpt);
+        } else {
+          console.log(JSON.stringify(result, null, 2));
+        }
+      } catch (error) {
+        ui.displayError('Failed to get workflow guidance', error as Error);
         process.exit(1);
       }
     });

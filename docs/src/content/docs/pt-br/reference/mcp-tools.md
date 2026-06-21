@@ -10,7 +10,7 @@ Esta página é a referência exaustiva das tools expostas pelo servidor MCP do 
 O dotcontext mantém sua superfície de tools deliberadamente enxuta. Em vez de dezenas de tools específicas, a maioria das capacidades é agrupada em algumas **tools de gateway consolidadas** que recebem um parâmetro `action`. Algumas **tools dedicadas do workflow** ficam por conta própria porque são chamadas o tempo todo durante o PREVC.
 
 :::note[Nomes das tools]
-As tools abaixo são registradas com nomes como `explore`, `context`, `sync`, `plan`, `agent`, `skill`, `harness`, `workflow-init`, `workflow-status`, `workflow-advance` e `workflow-manage`. Seu cliente pode exibi-las com um prefixo de servidor (por exemplo `mcp__dotcontext__explore`). Os nomes das actions e os parâmetros são idênticos, independentemente do prefixo.
+As tools abaixo são registradas com nomes como `explore`, `context`, `sync`, `plan`, `agent`, `skill`, `harness`, `workflow-init`, `workflow-status`, `workflow-guide`, `workflow-advance` e `workflow-manage`. Seu cliente pode exibi-las com um prefixo de servidor (por exemplo `mcp__dotcontext__explore`). Os nomes das actions e os parâmetros são idênticos, independentemente do prefixo.
 :::
 
 ## Como ler esta página
@@ -264,6 +264,12 @@ Obtém o status atual do workflow PREVC. Não exige parâmetros.
 
 **Retorna:** fase atual, status de todas as fases, configurações de gates, planos vinculados e atividade dos agents.
 
+### workflow-guide
+
+Obtém orientação PREVC adapter-neutral a partir do harness. Aceita `repoPath`, `phaseHint`, `intent` e `format` opcionais.
+
+**Retorna:** estado do workflow, próximos passos, skills relevantes, dicas portáveis de decisão e um excerpt renderizável compacto ou completo.
+
 ### workflow-advance
 
 Avança para a próxima fase do PREVC.
@@ -324,7 +330,7 @@ Além das tools, o servidor expõe recursos somente leitura que seu cliente pode
 3. `context` → `fillSingle` — preenche cada arquivo pendente (execute por arquivo)
 4. `context` → `scaffoldPlan` — opcional, apenas para trabalho não trivial
 5. `workflow-init` — inicia o PREVC (obrigatório para trabalho não trivial)
-6. `workflow-status` → `workflow-advance` → handoffs → `workflow-status`
+6. `workflow-guide` → `workflow-advance` → handoffs → `workflow-guide`
 
 **Orquestração por fase:**
 

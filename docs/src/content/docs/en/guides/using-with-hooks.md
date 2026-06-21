@@ -62,7 +62,7 @@ All supported hosts run the same harness actions; only the event envelope differ
 | Session start | `context` → `check` | Inject compact index excerpt when `.context/` exists |
 | Session start (no `.context/`) | none (informational) | One-line hint to run MCP init or initialize context |
 | Post tool use (Write / Edit / Bash) | `harness` → `appendTrace` | Append durable trace under `.context/runtime/` |
-| Stop / session end | `workflow-status` | Inject phase summary when a PREVC workflow is active |
+| Stop / session end | `workflow-guide` | Inject compact PREVC next steps, skills, and gate hints |
 
 Hooks are **non-blocking by default**. Harness errors do not stop your agent session.
 
@@ -163,4 +163,4 @@ Recommended setup for Claude Code or Codex CLI:
 - [Installation](/getting-started/installation/) — MCP, hooks, and Pi install paths.
 - [Using dotcontext with MCP](/guides/using-with-mcp/) — the full MCP tool surface.
 - [The harness runtime](/concepts/harness-runtime/) — sessions, traces, and artifacts.
-- [The PREVC workflow](/concepts/prevc-workflow/) — what `workflow-status` reports on stop.
+- [The PREVC workflow](/concepts/prevc-workflow/) — what `workflow-guide` reports on stop.

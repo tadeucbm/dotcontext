@@ -37,7 +37,7 @@ Flags: `--global`, `--local`, `--dry-run`, `--format json|toml` (Codex), `-v`. L
 | Início de sessão | `context` → `check` | Injeta índice compacto se `.context/` existir |
 | Sem `.context/` | informativo | Dica para inicializar via MCP |
 | Pós ferramenta (Write/Edit/Bash) | `harness` → `appendTrace` | Trace em `.context/runtime/` |
-| Stop / fim | `workflow-status` | Resumo de fase PREVC |
+| Stop / fim | `workflow-guide` | Próximos passos, skills e dicas de gate PREVC |
 
 Hooks são **não bloqueantes** por padrão.
 

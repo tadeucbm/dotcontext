@@ -138,12 +138,13 @@ Skill management: `list`, `getContent`, `getForPhase`, `scaffold`, `export`, `fi
 
 ## 5. The PREVC workflow tools
 
-PREVC (Plan → Review → Execute → Verify → Confirm) is the structured development workflow. Four dedicated tools drive it:
+PREVC (Plan → Review → Execute → Verify → Confirm) is the structured development workflow. Five dedicated tools drive it:
 
 | Tool | Purpose | Notable parameters |
 | --- | --- | --- |
 | `workflow-init` | Start a workflow for a feature | `name` (required), `description`, `scale` (QUICK/SMALL/MEDIUM/LARGE), `autonomous`, `require_plan`, `require_approval` |
 | `workflow-status` | Get the current phase, gates, and activity | none required |
+| `workflow-guide` | Get next steps, skills, and gate hints | `intent`, `format` |
 | `workflow-advance` | Move to the next phase | `outputs` (artifact paths), `force` (bypass gates) |
 | `workflow-manage` | Handoffs, docs, gates, sensors, tasks | `action` (handoff, createDoc, approvePlan, runSensors, defineTask, checkpoint, …) |
 
@@ -153,7 +154,7 @@ A typical workflow loop in natural language:
 
 > Start a MEDIUM workflow for "add CSV export" that requires a plan before review. Then show me the status, run the sensors, and advance to the next phase once they pass.
 
-That maps to `workflow-init` (with `scale: "MEDIUM"`, `require_plan: true`), `workflow-status`, `workflow-manage` (`action: "runSensors"`), and `workflow-advance`.
+That maps to `workflow-init` (with `scale: "MEDIUM"`, `require_plan: true`), `workflow-guide`, `workflow-manage` (`action: "runSensors"`), and `workflow-advance`.
 
 :::note[Gates protect transitions]
 If you set `require_plan` or `require_approval`, the corresponding transition is gated until the plan or approval exists. `workflow-advance` reports the gate result; pass `force: true` only when you intentionally want to bypass it.

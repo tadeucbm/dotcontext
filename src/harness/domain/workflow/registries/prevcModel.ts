@@ -349,15 +349,4 @@ export const PREVC_DOC_GUIDES: Record<PrevcDocType, PrevcDocGuide> = {
   },
 };
 
-export const PREVC_SKILL_PHASES = {
-  'commit-message': ['E', 'C'],
-  'pr-review': ['R', 'V'],
-  'code-review': ['R', 'V'],
-  'test-generation': ['E', 'V'],
-  documentation: ['P', 'C'],
-  refactoring: ['E'],
-  'bug-investigation': ['E', 'V'],
-  'feature-breakdown': ['P'],
-  'api-design': ['P', 'R'],
-  'security-audit': ['R', 'V'],
-} as const satisfies Record<string, readonly PrevcPhase[]>;
+export { PREVC_SKILL_PHASES } from '../skills/builtInSkillCatalog';

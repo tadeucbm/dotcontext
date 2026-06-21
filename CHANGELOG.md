@@ -7,25 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- **Hook install CLI** — `dotcontext hook install`, `hook dispatch`, and `hook uninstall` for Claude Code, Codex CLI, and Pi, with `--local`, `--global`, `--dry-run`, and Codex-specific `--format json|toml`.
-- **Host hook runtime** — typed event mappers and response adapters for Claude Code, Codex CLI, and Pi (`session_start`, `PostToolUse`, `Stop` / `agent_end`), wired through a shared harness hook adapter.
-- **`@dotcontext/integrations` package** — publishable host hook adapters and mappers (`./claude-code`, `./codex`, `./pi-dev` subpaths).
-- **`@dotcontext/pi` package** — Pi npm extension for in-process lifecycle hooks (bootstrap, tracing, workflow reminders).
-- **MCP install: Pi** — `npx @dotcontext/mcp install pi` writes `.mcp.json` (local) or `~/.config/mcp/mcp.json` (global).
-
-### Changed
-
-- **MCP install: Gemini** — merged `gemini-cli` into a single `gemini` registry id; `gemini-cli` remains a one-release alias for install commands.
-- **MCP detection paths** — Windsurf and Amazon Q detection now checks alternate config directories.
-- **Documentation** — updated architecture, installation, and contributor docs for integrations, hooks, and Pi; MCP client count is now 17.
-
-## [1.0.0] - 2026-06-06
-
-This is the first stable release. It removes **all legacy backwards-compatibility
-code**. Projects, tool configs, and on-disk state must already be on the current
-formats — there is no automatic migration from pre-1.0 layouts.
+Planned for **1.0.0** (first stable release; not yet published). This release
+removes **all legacy backwards-compatibility code**. Projects, tool configs, and
+on-disk state must already be on the current formats — there is no automatic
+migration from pre-1.0 layouts.
 
 ### Removed — BREAKING CHANGES
 
@@ -68,6 +53,9 @@ formats — there is no automatic migration from pre-1.0 layouts.
 
 ### Changed
 
+- **MCP install: Gemini** — merged `gemini-cli` into a single `gemini` registry id; `gemini-cli` remains a one-release alias for install commands.
+- **MCP detection paths** — Windsurf and Amazon Q detection now checks alternate config directories.
+- **Documentation** — updated architecture, installation, and contributor docs for integrations, hooks, and Pi; MCP client count is now 17.
 - **Reorganized the on-disk `.context` data layout** into authored config vs generated runtime state. The single `.context/harness/` folder (which mixed editable config with machine-generated state) and the separate `.context/workflow/` folder are replaced by:
   - `.context/config/` — authored, version-controlled config: `policy.json`, `sensors.json` (moved from `.context/harness/`)
   - `.context/runtime/` — all generated state, gitignored as one block:
@@ -76,11 +64,18 @@ formats — there is no automatic migration from pre-1.0 layouts.
     - `runtime/contracts/` — task and handoff contracts (was `harness/contracts`)
     - `runtime/evaluations/{replays,datasets}/` — replay and failure-dataset output (was `harness/replays`, `harness/datasets`)
   - All paths now resolve through a single source of truth (`resolveRuntimeLayout` in `src/shared/fs/pathHelpers.ts`) instead of hand-built `'harness'`/`'workflow'` path segments.
-  - The `src/harness` code module is unchanged — only the on-disk data folder moved. **1.0.0 does not migrate pre-1.0 layouts** (see Removed, above); move `.context/harness/` and `.context/workflow/` to `.context/config/` and `.context/runtime/` manually if upgrading an old checkout.
+  - The `src/harness` code module is unchanged — only the on-disk data folder moved. **This release does not migrate pre-1.0 layouts** (see Removed, above); move `.context/harness/` and `.context/workflow/` to `.context/config/` and `.context/runtime/` manually if upgrading an old checkout.
   - A layering test forbids `src/harness/domain` code from importing the application/adapters layers, and a boundary test forbids `src/harness` from importing the `cli`/`mcp` surfaces, keeping the runtime decoupled and reusable.
 
 ### Added
 
+- **Hook install CLI** — `dotcontext hook install`, `hook dispatch`, and `hook uninstall` for Claude Code, Codex CLI, and Pi, with `--local`, `--global`, `--dry-run`, and Codex-specific `--format json|toml`.
+- **Host hook runtime** — typed event mappers and response adapters for Claude Code, Codex CLI, and Pi (`session_start`, `PostToolUse`, `Stop` / `agent_end`), wired through a shared harness hook adapter.
+- **Adapter-neutral workflow guidance** — `workflow-guide` now exposes PREVC next steps, relevant skills, and portable gate decision hints through the harness, MCP, hooks/Pi renderers, and `dotcontext admin workflow guide`.
+- **`@dotcontext/integrations` package** — publishable host hook adapters and mappers (`./claude-code`, `./codex`, `./pi-dev` subpaths).
+- **`@dotcontext/pi` package** — Pi npm extension for in-process lifecycle hooks (bootstrap, tracing, workflow reminders).
+- **MCP install: Pi** — `npx @dotcontext/mcp install pi` writes `.mcp.json` (local) or `~/.config/mcp/mcp.json` (global).
+- **Built-in skill catalog** — single source of truth for built-in skill slugs, PREVC phase mapping, and generated `dotcontext-workflow-{p,r,e,v,c}` meta skills.
 - **Built-in `tests-passing` sensor** (`src/services/harness/sensors/testsPassing.ts`)
   - Default `kind: 'jest'` runs `npm test -- --runInBand --json`, parses jest's JSON output, and reports `{ numPassedTests, numFailedTests, numTotalTestSuites, failures: [{ name, message }] }`; passes iff exit 0 *and* `numFailedTests === 0`
   - `kind: 'exit-code'` mode for non-jest runners passes iff the configured `testCommand` argv exits 0

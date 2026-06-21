@@ -9,6 +9,7 @@ import {
   handleHarness,
   handleWorkflowInit,
   handleWorkflowStatus,
+  handleWorkflowGuide,
   handleWorkflowAdvance,
   handleWorkflowManage,
 } from '..';
@@ -25,6 +26,7 @@ describe('MCP boundary exports', () => {
     expect(handleHarness).toBeDefined();
     expect(handleWorkflowInit).toBeDefined();
     expect(handleWorkflowStatus).toBeDefined();
+    expect(handleWorkflowGuide).toBeDefined();
     expect(handleWorkflowAdvance).toBeDefined();
     expect(handleWorkflowManage).toBeDefined();
   });

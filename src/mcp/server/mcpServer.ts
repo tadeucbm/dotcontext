@@ -37,6 +37,7 @@ import {
   handleHarness,
   handleWorkflowInit,
   handleWorkflowStatus,
+  handleWorkflowGuide,
   handleWorkflowAdvance,
   handleWorkflowManage,
   type ExploreParams,
@@ -48,6 +49,7 @@ import {
   type HarnessParams,
   type WorkflowInitParams,
   type WorkflowStatusParams,
+  type WorkflowGuideParams,
   type WorkflowAdvanceParams,
   type WorkflowManageParams,
   type MCPToolResponse,
@@ -315,7 +317,26 @@ Returns: Current phase, all phase statuses, gate settings, linked plans, agent a
       return handleWorkflowStatus(params as WorkflowStatusParams, { repoPath: this.getRepoPath((params as WorkflowStatusParams).repoPath) });
     }));
 
-    // Tool 3c: workflow-advance - Advance to next phase
+    // Tool 3c: workflow-guide - Adapter-neutral workflow guidance
+    this.server.registerTool('workflow-guide', {
+      description: `Get adapter-neutral PREVC workflow guidance from the harness.
+
+Use this for session orientation: current workflow state, next steps, relevant skills, and portable gate decision hints. Adapters should render this response instead of reimplementing workflow direction.`,
+      inputSchema: {
+        repoPath: z.string().optional()
+          .describe('Repository path'),
+        phaseHint: z.enum(['P', 'R', 'E', 'V', 'C']).optional()
+          .describe('Optional PREVC phase hint derived from the caller event'),
+        intent: z.enum(['session_start', 'pre_edit', 'post_edit', 'session_end', 'explicit']).optional()
+          .describe('Caller intent used to tune guidance'),
+        format: z.enum(['compact', 'full']).optional()
+          .describe('Excerpt format; compact is the default'),
+      }
+    }, wrap('workflow-guide', async (params): Promise<MCPToolResponse> => {
+      return handleWorkflowGuide(params as WorkflowGuideParams, { repoPath: this.getRepoPath((params as WorkflowGuideParams).repoPath) });
+    }));
+
+    // Tool 3d: workflow-advance - Advance to next phase
     this.server.registerTool('workflow-advance', {
       description: `Advance workflow to the next PREVC phase (P→R→E→V→C).
 
@@ -334,7 +355,7 @@ Use force=true to bypass gates, or use workflow-manage({ action: 'setAutonomous'
       return handleWorkflowAdvance(params as WorkflowAdvanceParams, { repoPath: this.getRepoPath((params as WorkflowAdvanceParams).repoPath) });
     }));
 
-    // Tool 3d: workflow-manage - Manage workflow operations
+    // Tool 3e: workflow-manage - Manage workflow operations
     this.server.registerTool('workflow-manage', {
       description: `Manage workflow operations: handoffs, collaboration, documents, gates, approvals, and harness runtime state.
 

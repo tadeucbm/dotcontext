@@ -9,11 +9,18 @@ export {
   SkillMetadata,
   SkillReference,
   DiscoveredSkills,
+} from './types';
+
+export {
   BUILT_IN_SKILLS,
   BuiltInSkillType,
   isBuiltInSkill,
+  PREVC_SKILL_PHASES,
   SKILL_TO_PHASES,
-} from './types';
+  META_SKILL_SLUGS,
+  PHASE_META_SKILL,
+  dotcontextWorkflowPhaseSkillSlug,
+} from './builtInSkillCatalog';
 
 export {
   SkillRegistry,

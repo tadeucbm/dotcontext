@@ -42,27 +42,16 @@ function formatContextAdditionalContext(data: unknown): string {
   return `dotcontext: scaffold ready (${enabled.join(', ')}). Use MCP context tools for navigation and workflow.`;
 }
 
-function formatWorkflowStatusAdditionalContext(data: unknown): string {
+function formatWorkflowGuideAdditionalContext(data: unknown): string {
   if (!isRecord(data)) {
-    return 'dotcontext: workflow status unavailable.';
+    return 'dotcontext: workflow guide unavailable.';
   }
 
-  if (data.active === false) {
-    return 'dotcontext: no active PREVC workflow. Run workflow-init when starting planned work.';
+  if (typeof data.excerpt === 'string' && data.excerpt.length > 0) {
+    return data.excerpt;
   }
 
-  const currentPhase = typeof data.currentPhase === 'string' ? data.currentPhase : undefined;
-  const name = typeof data.name === 'string' ? data.name : undefined;
-
-  if (currentPhase && name) {
-    return `dotcontext: workflow "${name}" — phase ${currentPhase}.`;
-  }
-
-  if (currentPhase) {
-    return `dotcontext: workflow phase ${currentPhase}.`;
-  }
-
-  return 'dotcontext: workflow active. Use workflow-status for details.';
+  return 'dotcontext: workflow guide unavailable.';
 }
 
 function mapSuccessResponse(
@@ -80,11 +69,11 @@ function mapSuccessResponse(
     };
   }
 
-  if (hostEventName === 'Stop' && response.tool === 'workflow-status') {
+  if (hostEventName === 'Stop' && response.tool === 'workflow-guide') {
     return {
       hookSpecificOutput: {
         hookEventName: 'Stop',
-        additionalContext: formatWorkflowStatusAdditionalContext(data),
+        additionalContext: formatWorkflowGuideAdditionalContext(data),
       },
     };
   }

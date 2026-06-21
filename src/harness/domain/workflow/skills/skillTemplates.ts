@@ -8,7 +8,8 @@
  * scaffolding layer to maintain a single source of truth.
  */
 
-import { BuiltInSkillType } from './types';
+import { BuiltInSkillType, dotcontextWorkflowPhaseSkillSlug, PHASE_META_SKILL } from './builtInSkillCatalog';
+import type { PrevcPhase } from '../types';
 import {
   SkillDefaultContent,
 } from '../../../application/context/scaffolding/generators/shared/structures/skills/factory';
@@ -88,6 +89,14 @@ function buildTemplateDescription(baseDescription: string, content: SkillDefault
  * Get all built-in skill templates
  */
 export function getBuiltInSkillTemplates(): Record<BuiltInSkillType, SkillTemplate> {
+  const phaseTemplates = (Object.keys(PHASE_META_SKILL) as PrevcPhase[]).reduce(
+    (acc, phase) => {
+      acc[dotcontextWorkflowPhaseSkillSlug(phase)] = createDotcontextWorkflowPhaseSkill(phase);
+      return acc;
+    },
+    {} as Record<ReturnType<typeof dotcontextWorkflowPhaseSkillSlug>, SkillTemplate>
+  );
+
   return {
     'commit-message': createCommitMessageSkill(),
     'pr-review': createPrReviewSkill(),
@@ -99,7 +108,22 @@ export function getBuiltInSkillTemplates(): Record<BuiltInSkillType, SkillTempla
     'feature-breakdown': createFeatureBreakdownSkill(),
     'api-design': createApiDesignSkill(),
     'security-audit': createSecurityAuditSkill(),
+    'dotcontext-workflow': createDotcontextWorkflowSkill(),
+    'dotcontext-tooling': createDotcontextToolingSkill(),
+    ...phaseTemplates,
   };
+}
+
+function createMetaSkillTemplate(
+  title: string,
+  description: string,
+  sections: Array<{ heading: string; body: string }>
+): SkillTemplate {
+  let content = `# ${title}\n\n`;
+  for (const section of sections) {
+    content += `## ${section.heading}\n${section.body}\n\n`;
+  }
+  return { description, content: content.trim() };
 }
 
 function createCommitMessageSkill(): SkillTemplate {
@@ -180,4 +204,161 @@ function createSecurityAuditSkill(): SkillTemplate {
     description: buildTemplateDescription('Review code and infrastructure for security weaknesses', securityAuditContent),
     content: contentToMarkdown('Security Audit', overview, securityAuditContent),
   };
+}
+
+function createDotcontextWorkflowSkill(): SkillTemplate {
+  return createMetaSkillTemplate(
+    'Dotcontext Workflow',
+    'Operate PREVC workflow through any adapter (MCP, CLI, hooks, Pi)',
+    [
+      {
+        heading: 'When to Use',
+        body: `- Starting or continuing structured work in a dotcontext-enabled repo
+- You need orientation on the current PREVC phase or next harness action
+- The transport differs (MCP tool, CLI command, hook, Pi extension) but the workflow rules are the same`,
+      },
+      {
+        heading: 'PREVC Phases',
+        body: `- **P** Planning — requirements, specs, acceptance criteria
+- **R** Review — architecture, ADRs, design review (optional by scale)
+- **E** Execution — implementation and unit tests
+- **V** Validation — QA, review, evidence and sensors
+- **C** Confirmation — docs, changelog, deploy handoff (optional by scale)`,
+      },
+      {
+        heading: 'Harness-First Rules',
+        body: `1. Workflow state lives in the harness (\`.context/runtime/workflows/\`), not in the adapter.
+2. Call **workflow-init** for non-trivial planned work; skip for trivial edits.
+3. Use **workflow-guide** (or **workflow-status**) for current phase, next steps, skills, and gate hints.
+4. Advance with **workflow-advance** only when phase deliverables are complete.
+5. Manage checkpoints, sensors, and handoffs with **workflow-manage**.`,
+      },
+      {
+        heading: 'Adapter Neutrality',
+        body: `The same actions are available regardless of transport:
+- MCP — harness adapter tools (\`workflow-init\`, \`workflow-guide\`, etc.)
+- CLI — \`admin workflow\` commands
+- Hooks / Pi — thin clients that call the same harness runtime
+
+Read the phase-specific \`dotcontext-workflow-{p,r,e,v,c}\` skill for the active checklist.`,
+      },
+    ]
+  );
+}
+
+type WorkflowPhaseLetter = 'P' | 'R' | 'E' | 'V' | 'C';
+
+const WORKFLOW_PHASE_CHECKLISTS: Record<
+  WorkflowPhaseLetter,
+  { name: string; checklist: string; outputs: string }
+> = {
+  P: {
+    name: 'Planning',
+    checklist: `1. Clarify scope, requirements, and acceptance criteria
+2. Create or link a plan (\`context scaffoldPlan\` → \`plan link\`)
+3. Identify risks, dependencies, and scale (QUICK/SMALL/MEDIUM/LARGE)
+4. Start harness workflow with \`workflow-init\` when work is non-trivial`,
+    outputs: 'prd, tech-spec, requirements, wireframes',
+  },
+  R: {
+    name: 'Review',
+    checklist: `1. Review architecture, ADRs, and technical decisions
+2. Validate design against requirements and constraints
+3. Approve linked plan via \`workflow-manage approvePlan\` when \`require_approval\` is on
+4. Resolve blocking review comments before advancing to Execution`,
+    outputs: 'architecture, adr, design-spec',
+  },
+  E: {
+    name: 'Execution',
+    checklist: `1. Implement against the approved spec and architecture
+2. Follow repository patterns; keep changes scoped to phase deliverables
+3. Add or update unit tests for changed behavior
+4. Record artifacts and traces with \`workflow-manage\` when useful`,
+    outputs: 'code, unit-tests',
+  },
+  V: {
+    name: 'Validation',
+    checklist: `1. Run the test suite and fix failures
+2. Review code quality, security, and performance risks
+3. Run required sensors (\`workflow-manage runSensors\`) and attach evidence
+4. Advance only when validation gates and acceptance criteria pass`,
+    outputs: 'test-report, review-comments, approval',
+  },
+  C: {
+    name: 'Confirmation',
+    checklist: `1. Update documentation, README, and changelog
+2. Export skills or context with \`sync\` when adapters need refreshed assets
+3. Capture deployment or handoff notes
+4. Complete the workflow with \`workflow-advance\` when Confirmation deliverables are done`,
+    outputs: 'documentation, changelog, deploy',
+  },
+};
+
+function createDotcontextWorkflowPhaseSkill(phase: WorkflowPhaseLetter): SkillTemplate {
+  const model = WORKFLOW_PHASE_CHECKLISTS[phase];
+  return createMetaSkillTemplate(
+    `Dotcontext Workflow — Phase ${phase}`,
+    `PREVC phase ${phase} (${model.name}) checklist for harness-backed work`,
+    [
+      {
+        heading: 'When to Use',
+        body: `Active PREVC workflow is in phase **${phase} (${model.name})** and you need the phase checklist independent of MCP, CLI, hooks, or Pi.`,
+      },
+      {
+        heading: 'Checklist',
+        body: model.checklist,
+      },
+      {
+        heading: 'Expected Outputs',
+        body: model.outputs,
+      },
+      {
+        heading: 'Orientation',
+        body: `Call \`workflow-guide\` for live next steps, relevant skills, and gate decisions. Use \`dotcontext-workflow\` for the full PREVC overview.`,
+      },
+    ]
+  );
+}
+
+function createDotcontextToolingSkill(): SkillTemplate {
+  return createMetaSkillTemplate(
+    'Dotcontext Tooling',
+    'When to use harness actions (init, guide, advance, manage, sensors) across any adapter',
+    [
+      {
+        heading: 'When to Use',
+        body: `- You need to pick the right harness action for the current moment
+- Unsure whether to init, check status, advance, or run sensors
+- Working through MCP, CLI, hooks, or Pi — the action names and semantics are the same`,
+      },
+      {
+        heading: 'Workflow Actions',
+        body: `- **workflow-init** — start PREVC for planned/non-trivial work; creates canonical harness state
+- **workflow-status** — read phase, scale, gates, and linked plans (status only)
+- **workflow-guide** — next steps, skills, decision hints; preferred for session orientation
+- **workflow-advance** — move to the next PREVC phase when deliverables are complete
+- **workflow-manage** — handoffs, checkpoints, tasks, sensors, plan approval, autonomous mode`,
+      },
+      {
+        heading: 'Context & Assets',
+        body: `- **context** — init/fill scaffolding (\`.context/\` docs, agents, skills, plans)
+- **plan** — link and track execution plans under PREVC gates
+- **skill** — list, scaffold, or export built-in and custom skills
+- **sync** — export/import context to native AI tool formats
+- **agent** — discover agent playbooks and orchestration sequences
+- **explore** — search and analyze the codebase
+- **harness** — durable sessions, traces, artifacts, policy, replay`,
+      },
+      {
+        heading: 'Quick Chooser',
+        body: `| Situation | Action |
+| --- | --- |
+| No workflow yet, starting planned work | workflow-init |
+| Need what to do now | workflow-guide |
+| Phase done, move forward | workflow-advance |
+| Tests/evidence before Validation exit | workflow-manage runSensors |
+| Scaffold missing .context assets | context init / skill scaffold |`,
+      },
+    ]
+  );
 }

@@ -10,7 +10,7 @@ This page is the exhaustive reference for the tools exposed by the dotcontext MC
 dotcontext keeps its tool surface deliberately small. Instead of dozens of narrow tools, most capabilities are grouped under a handful of **consolidated gateway tools** that take an `action` parameter. A few **dedicated workflow tools** stand on their own because they are called constantly during PREVC.
 
 :::note[Tool naming]
-The tools below register under names like `explore`, `context`, `sync`, `plan`, `agent`, `skill`, `harness`, `workflow-init`, `workflow-status`, `workflow-advance`, and `workflow-manage`. Your client may surface them with a server prefix (for example `mcp__dotcontext__explore`). The action names and parameters are identical regardless of the prefix.
+The tools below register under names like `explore`, `context`, `sync`, `plan`, `agent`, `skill`, `harness`, `workflow-init`, `workflow-status`, `workflow-guide`, `workflow-advance`, and `workflow-manage`. Your client may surface them with a server prefix (for example `mcp__dotcontext__explore`). The action names and parameters are identical regardless of the prefix.
 :::
 
 ## How to read this page
@@ -264,6 +264,12 @@ Get the current PREVC workflow status. Takes no required parameters.
 
 **Returns:** current phase, all phase statuses, gate settings, linked plans, and agent activity.
 
+### workflow-guide
+
+Get adapter-neutral PREVC guidance from the harness. Takes optional `repoPath`, `phaseHint`, `intent`, and `format`.
+
+**Returns:** workflow state, next steps, relevant skills, portable decision hints, and a compact or full renderable excerpt.
+
 ### workflow-advance
 
 Advance to the next PREVC phase.
@@ -324,7 +330,7 @@ In addition to tools, the server exposes read-only resources your client can fet
 3. `context` → `fillSingle` — fill each pending file (run per file)
 4. `context` → `scaffoldPlan` — optional, non-trivial work only
 5. `workflow-init` — start PREVC (mandatory for non-trivial work)
-6. `workflow-status` → `workflow-advance` → handoffs → `workflow-status`
+6. `workflow-guide` → `workflow-advance` → handoffs → `workflow-guide`
 
 **Phase-based orchestration:**
 

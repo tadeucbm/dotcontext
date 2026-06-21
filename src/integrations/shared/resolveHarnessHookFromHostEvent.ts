@@ -100,8 +100,9 @@ export function resolveHarnessHookFromHostEvent(
     }
     case 'Stop':
       return {
-        tool: 'workflow-status',
+        tool: 'workflow-guide',
         params: {
+          intent: 'session_end',
           ...(repoPath ? { repoPath } : {}),
         },
       };

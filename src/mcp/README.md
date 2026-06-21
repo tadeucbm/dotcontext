@@ -12,11 +12,11 @@ The MCP tools follow a simple, explicit pattern:
 
 1. **Scaffolding**: `context({ action: "init" })`
 2. **Content**: `context({ action: "fillSingle", filePath })`
-3. **Workflow**: `workflow-init({ name: "feature-name" })`
+3. **Workflow**: `workflow-init({ name: "feature-name" })`, then `workflow-guide({ intent: "explicit" })`
 
-## Available Tools (9 total)
+## Available Tools (12 total)
 
-### Gateway Tools (5)
+### Gateway Tools (7)
 
 | Tool | Description |
 |------|-------------|
@@ -27,12 +27,13 @@ The MCP tools follow a simple, explicit pattern:
 | `agent` | Agent orchestration and discovery |
 | `skill` | Skill management for on-demand expertise |
 
-### Dedicated Workflow Tools (4)
+### Dedicated Workflow Tools (5)
 
 | Tool | Description |
 |------|-------------|
 | `workflow-init` | Initialize a PREVC workflow (creates `.context/runtime/workflows/`) |
 | `workflow-status` | Get current workflow status |
+| `workflow-guide` | Get next steps, relevant skills, and portable gate hints |
 | `workflow-advance` | Advance to next phase |
 | `workflow-manage` | Manage handoffs, collaboration, documents, gates |
 

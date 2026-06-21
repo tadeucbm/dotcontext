@@ -94,7 +94,7 @@ export class HarnessPlansService {
 The linked plan is now attached to the harness-backed PREVC workflow.
 
 Next:
-1. Use workflow-status() to confirm the active phase and harness binding
+1. Use workflow-guide() to confirm the active phase, next steps, and harness binding
 2. Continue planning work
 3. Use workflow-advance() when the planning phase is complete`
       : `PLAN LINKED - WORKFLOW NOT STARTED
@@ -105,17 +105,17 @@ Until workflow-init runs, the harness does not have canonical workflow state and
 Next:
 1. Call workflow-init({ name: "${planSlug}" }) to create the harness-backed PREVC workflow
 2. Call plan({ action: "link", planSlug: "${planSlug}" }) again after workflow-init
-3. Use workflow-status() to verify the plan is bound to the harness workflow`;
+3. Use workflow-guide() to verify the plan is bound to the harness workflow`;
 
     const nextSteps = workflowActive
       ? [
-          'RECOMMENDED: Call workflow-status() to confirm the linked plan and harness binding',
+          'RECOMMENDED: Call workflow-guide() to confirm the linked plan and harness binding',
           'THEN: Continue planning and call workflow-advance() when ready to leave phase P',
         ]
       : [
           `REQUIRED: Call workflow-init({ name: "${planSlug}" }) to start the harness-backed PREVC workflow`,
           `REQUIRED: Call plan({ action: "link", planSlug: "${planSlug}" }) again after workflow-init so gates see the plan`,
-          'THEN: Call workflow-status() to confirm the workflow and harness binding are active',
+          'THEN: Call workflow-guide() to confirm the workflow and harness binding are active',
         ];
 
     return {

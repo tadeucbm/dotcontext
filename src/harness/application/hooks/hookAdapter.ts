@@ -25,6 +25,7 @@ export const HARNESS_ADAPTER_TOOL_NAMES = [
   'harness',
   'workflow-init',
   'workflow-status',
+  'workflow-guide',
   'workflow-advance',
   'workflow-manage',
 ] as const satisfies readonly HarnessAdapterToolName[];

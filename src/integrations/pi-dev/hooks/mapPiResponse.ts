@@ -44,23 +44,16 @@ function formatContextMessage(data: unknown): string {
   return `dotcontext: scaffold ready (${enabled.join(', ')}).`;
 }
 
-function formatWorkflowNotify(data: unknown): string | undefined {
-  if (!isRecord(data) || data.active === false) {
+function formatWorkflowGuideNotify(data: unknown): string | undefined {
+  if (!isRecord(data)) {
     return undefined;
   }
 
-  const currentPhase = typeof data.currentPhase === 'string' ? data.currentPhase : undefined;
-  const name = typeof data.name === 'string' ? data.name : undefined;
-
-  if (currentPhase && name) {
-    return `dotcontext: workflow "${name}" — phase ${currentPhase}.`;
+  if (typeof data.excerpt === 'string' && data.excerpt.length > 0) {
+    return data.excerpt;
   }
 
-  if (currentPhase) {
-    return `dotcontext: workflow phase ${currentPhase}.`;
-  }
-
-  return 'dotcontext: workflow active.';
+  return undefined;
 }
 
 export function mapPiResponse(
@@ -96,8 +89,8 @@ export function mapPiResponse(
     return { source: 'pi-dev', silent: true };
   }
 
-  if (event.type === 'agent_end' && response.tool === 'workflow-status') {
-    const notify = formatWorkflowNotify(extractResultData(response));
+  if (event.type === 'agent_end' && response.tool === 'workflow-guide') {
+    const notify = formatWorkflowGuideNotify(extractResultData(response));
     return notify
       ? { source: 'pi-dev', notify }
       : { source: 'pi-dev', silent: true };

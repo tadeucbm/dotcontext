@@ -7,7 +7,6 @@
  */
 
 import { PrevcPhase } from '../types';
-import { PREVC_SKILL_PHASES } from '../registries/prevcModel';
 
 /**
  * SKILL.md frontmatter metadata
@@ -63,34 +62,10 @@ export interface DiscoveredSkills {
   all: Skill[];
 }
 
-/**
- * Built-in skills we provide
- */
-export const BUILT_IN_SKILLS = [
-  'commit-message',
-  'pr-review',
-  'code-review',
-  'test-generation',
-  'documentation',
-  'refactoring',
-  'bug-investigation',
-  'feature-breakdown',
-  'api-design',
-  'security-audit',
-] as const;
-
-export type BuiltInSkillType = (typeof BUILT_IN_SKILLS)[number];
-
-/**
- * Check if a skill is built-in
- */
-export function isBuiltInSkill(skillType: string): skillType is BuiltInSkillType {
-  return BUILT_IN_SKILLS.includes(skillType as BuiltInSkillType);
-}
-
-/**
- * Skill to PREVC phase mapping
- */
-export const SKILL_TO_PHASES: Record<BuiltInSkillType, PrevcPhase[]> = Object.fromEntries(
-  Object.entries(PREVC_SKILL_PHASES).map(([skill, phases]) => [skill, [...phases]])
-) as Record<BuiltInSkillType, PrevcPhase[]>;
+export {
+  BUILT_IN_SKILLS,
+  BuiltInSkillType,
+  isBuiltInSkill,
+  PREVC_SKILL_PHASES,
+  SKILL_TO_PHASES,
+} from './builtInSkillCatalog';

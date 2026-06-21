@@ -56,10 +56,11 @@ describe('hook mapper unit tests', () => {
       )).toBeNull();
     });
 
-    it('maps Stop to workflow-status', () => {
+    it('maps Stop to workflow-guide', () => {
       expect(mapClaudeCodeEvent(stopFixture)).toEqual({
-        tool: 'workflow-status',
+        tool: 'workflow-guide',
         params: {
+          intent: 'session_end',
           repoPath: stopFixture.cwd,
         },
       });
@@ -93,10 +94,11 @@ describe('hook mapper unit tests', () => {
       });
     });
 
-    it('maps Stop to workflow-status', () => {
+    it('maps Stop to workflow-guide', () => {
       expect(mapCodexEvent(codexStopFixture)).toEqual({
-        tool: 'workflow-status',
+        tool: 'workflow-guide',
         params: {
+          intent: 'session_end',
           repoPath: codexStopFixture.cwd,
         },
       });
@@ -159,7 +161,7 @@ describe('hook mapper unit tests', () => {
       });
     });
 
-    it('maps agent_end to workflow-status', () => {
+    it('maps agent_end to workflow-guide', () => {
       expect(
         mapPiEvent({
           type: 'agent_end',
@@ -167,8 +169,9 @@ describe('hook mapper unit tests', () => {
           sessionId: 'pi-1',
         })
       ).toEqual({
-        tool: 'workflow-status',
+        tool: 'workflow-guide',
         params: {
+          intent: 'session_end',
           repoPath: '/tmp/repo',
         },
       });
@@ -224,7 +227,9 @@ describe('hook round-trip integrations', () => {
       codexStopFixture,
       {
         kind: 'json',
-        data: { active: true, name: 'feature-x', currentPhase: 'E' },
+        data: {
+          excerpt: 'dotcontext workflow guide:\nWorkflow "feature-x" - phase E.',
+        },
       },
       (output: ReturnType<typeof mapCodexResponse>) => {
         expect(output.source).toBe('codex');

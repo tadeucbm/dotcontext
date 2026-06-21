@@ -63,5 +63,10 @@ describe('CLI Commands', () => {
       expect(output).not.toMatch(/\n\s+create\b/);
       expect(output).not.toMatch(/\n\s+fill\b/);
     });
+
+    it('should expose workflow guide under admin workflow', () => {
+      const output = execSync(`node ${cliPath} admin workflow --help`, { encoding: 'utf8' });
+      expect(output).toContain('guide');
+    });
   });
 });

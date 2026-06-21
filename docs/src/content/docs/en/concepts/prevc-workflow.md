@@ -106,19 +106,21 @@ PREVC is MCP-first. The dedicated `workflow-*` tools cover the full lifecycle:
 | --- | --- |
 | `workflow-init` | Start a PREVC workflow; set `name`, optional `description`, `scale`, `autonomous`, and gate flags |
 | `workflow-status` | Report the current phase, all phase statuses, gates, linked plans, and activity |
+| `workflow-guide` | Return adapter-neutral next steps, relevant skills, and portable gate decision hints |
 | `workflow-advance` | Advance to the next phase; pass `outputs` produced and `force` to bypass gates |
 | `workflow-manage` | Manage operations: `handoff`, `approvePlan`, `setAutonomous`, `getGates`, `recordArtifact`, `defineTask`, `runSensors`, and more |
 
 A typical loop, after scaffolding `.context/`:
 
 ```text
-workflow-init  ->  workflow-status  ->  workflow-advance  ->  (handoff / gates)  ->  workflow-status
+workflow-init  ->  workflow-guide  ->  workflow-advance  ->  (handoff / gates)  ->  workflow-guide
 ```
 
 The same operations are available from the CLI for low-level state management:
 
 ```bash
 dotcontext admin workflow init "dark-mode" --description "Add dark mode" --scale MEDIUM
+dotcontext admin workflow guide
 dotcontext admin workflow status
 dotcontext admin workflow advance --outputs plan.md
 dotcontext admin workflow handoff planner developer --artifacts plan.md

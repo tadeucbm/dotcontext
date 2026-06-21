@@ -13,6 +13,7 @@ import {
 
 import { HarnessPolicyBlockedError } from '../policies/policyService';
 import { resolveRuntimeLayout } from '../../../shared/fs/pathHelpers';
+import type { HarnessWorkflowGuideInput } from '../workflow/workflowGuideTypes';
 
 export interface HarnessWorkflowInitInput {
   name: string;
@@ -28,6 +29,8 @@ export interface HarnessWorkflowInitInput {
 export interface HarnessWorkflowStatusInput {
   repoPath?: string;
 }
+
+export type { HarnessWorkflowGuideInput } from '../workflow/workflowGuideTypes';
 
 export interface HarnessWorkflowAdvanceInput {
   outputs?: string[];
@@ -103,6 +106,17 @@ export class HarnessWorkflowActionService {
       _status: 'workflow_active',
       enhancementPrompt,
       nextSteps,
+    };
+  }
+
+  async guide(params: HarnessWorkflowGuideInput = {}): Promise<HarnessWorkflowActionResult> {
+    const repoPath = path.resolve(params.repoPath || this.options.repoPath);
+    const { WorkflowGuideService } = await import('../workflow/workflowGuideService');
+    const guidance = await new WorkflowGuideService({ repoPath }).guide(params);
+
+    return {
+      success: true,
+      ...guidance,
     };
   }
 
@@ -273,7 +287,7 @@ AGENT ORCHESTRATION:
 NEXT ACTIONS:
 1. Begin implementation work directly
 2. Use workflow-advance to move through phases as work progresses
-3. Use workflow-status to check current state at any time
+3. Use workflow-guide to check current next steps at any time
 
 You may proceed without creating formal plans or waiting for approvals.`;
   }
@@ -318,7 +332,7 @@ RECOMMENDED ACTIONS:
 1. Create a plan using context with action "scaffoldPlan" (recommended for ${scale} scale)
 2. Or advance directly using workflow-advance if planning is not needed
 
-Use workflow-status to check current state at any time.`;
+Use workflow-guide to check current next steps at any time.`;
 }
 
 function buildWorkflowNextSteps(options: {
@@ -333,7 +347,7 @@ function buildWorkflowNextSteps(options: {
       'ACTION: Call agent({ action: "orchestrate", phase: "P" }) to discover agents',
       'ACTION: Use workflow-manage({ action: "handoff", ... }) to execute agent transitions',
       'OPTIONAL: Call workflow-advance to track phase progression',
-      'OPTIONAL: Call workflow-status to check current state',
+      'OPTIONAL: Call workflow-guide to check current next steps',
     ];
   }
 
@@ -353,6 +367,6 @@ function buildWorkflowNextSteps(options: {
     'ALTERNATIVE: Call agent({ action: "getSequence", task: "your task" }) for task-based sequence',
     'OPTIONAL: Use workflow-manage({ action: "handoff", ... }) for multi-agent work',
     'ALTERNATIVE: Call workflow-advance to skip planning phase',
-    'OPTIONAL: Call workflow-status to check current state',
+    'OPTIONAL: Call workflow-guide to check current next steps',
   ];
 }

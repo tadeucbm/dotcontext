@@ -551,10 +551,10 @@ function buildPlanWorkflowPrompt(params: {
     ? `1. Fill or refine the plan via context({ action: "fillSingle", filePath: "${planPath}" })
 2. Start the harness-backed workflow via workflow-init({ name: "${planSlug}" })
 3. Link the plan into the active workflow via plan({ action: "link", planSlug: "${planSlug}" })
-4. Confirm harness state via workflow-status()`
+4. Confirm harness state via workflow-guide()`
     : `1. Start the harness-backed workflow via workflow-init({ name: "${planSlug}" })
 2. Link the plan into the active workflow via plan({ action: "link", planSlug: "${planSlug}" })
-3. Confirm harness state via workflow-status()`;
+3. Confirm harness state via workflow-guide()`;
 
   return `PLAN CREATED - START HARNESS WORKFLOW
 
@@ -583,7 +583,7 @@ function buildPlanWorkflowNextSteps(params: {
 
   steps.push(`REQUIRED: Call workflow-init({ name: "${planSlug}" }) to start the harness-backed PREVC workflow`);
   steps.push(`REQUIRED: Call plan({ action: "link", planSlug: "${planSlug}" }) after workflow-init so gates use the plan`);
-  steps.push('THEN: Call workflow-status() to confirm the workflow and harness binding are active');
+  steps.push('THEN: Call workflow-guide() to confirm the workflow and harness binding are active');
 
   return steps;
 }

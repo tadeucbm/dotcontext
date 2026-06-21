@@ -138,12 +138,13 @@ Gerenciamento de skills: `list`, `getContent`, `getForPhase`, `scaffold`, `expor
 
 ## 5. As ferramentas do workflow PREVC
 
-PREVC (Plan → Review → Execute → Verify → Confirm) é o workflow estruturado de desenvolvimento. Quatro ferramentas dedicadas o conduzem:
+PREVC (Plan → Review → Execute → Verify → Confirm) é o workflow estruturado de desenvolvimento. Cinco ferramentas dedicadas o conduzem:
 
 | Ferramenta | Propósito | Parâmetros notáveis |
 | --- | --- | --- |
 | `workflow-init` | Inicia um workflow para uma feature | `name` (obrigatório), `description`, `scale` (QUICK/SMALL/MEDIUM/LARGE), `autonomous`, `require_plan`, `require_approval` |
 | `workflow-status` | Obtém a fase atual, gates e atividade | nenhum obrigatório |
+| `workflow-guide` | Obtém próximos passos, skills e dicas de gate | `intent`, `format` |
 | `workflow-advance` | Avança para a próxima fase | `outputs` (caminhos de artefatos), `force` (ignorar gates) |
 | `workflow-manage` | Handoffs, docs, gates, sensors, tasks | `action` (handoff, createDoc, approvePlan, runSensors, defineTask, checkpoint, …) |
 
@@ -153,7 +154,7 @@ Um loop típico de workflow em linguagem natural:
 
 > Inicie um workflow MEDIUM para "adicionar export CSV" que exige um plano antes do review. Depois mostre o status, rode os sensors e avance para a próxima fase quando eles passarem.
 
-Isso mapeia para `workflow-init` (com `scale: "MEDIUM"`, `require_plan: true`), `workflow-status`, `workflow-manage` (`action: "runSensors"`) e `workflow-advance`.
+Isso mapeia para `workflow-init` (com `scale: "MEDIUM"`, `require_plan: true`), `workflow-guide`, `workflow-manage` (`action: "runSensors"`) e `workflow-advance`.
 
 :::note[Gates protegem as transições]
 Se você definir `require_plan` ou `require_approval`, a transição correspondente fica bloqueada até que o plano ou a aprovação existam. O `workflow-advance` reporta o resultado do gate; passe `force: true` apenas quando você quer intencionalmente ignorá-lo.

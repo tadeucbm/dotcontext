@@ -31,7 +31,7 @@ npx -y @dotcontext/cli@latest hook install pi --local
 | --- | --- | --- |
 | `session_start` | `context` → `check` | Injeta bootstrap ou dica |
 | `tool_execution_end` | `harness` → `appendTrace` | Trace silencioso |
-| `agent_end` | `workflow-status` | Notificação de fase PREVC |
+| `agent_end` | `workflow-guide` | Notificação com próximos passos, skills e dicas de gate PREVC |
 
 ## MCP
 

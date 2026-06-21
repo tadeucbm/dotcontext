@@ -44,6 +44,7 @@ export { handleContext, type ContextOptions } from './context';
 // Dedicated workflow handlers (split from consolidated gateway)
 export { handleWorkflowInit, type WorkflowInitParams, type WorkflowInitOptions } from './workflowInit';
 export { handleWorkflowStatus, type WorkflowStatusParams, type WorkflowStatusOptions } from './workflowStatus';
+export { handleWorkflowGuide, type WorkflowGuideParams, type WorkflowGuideOptions } from './workflowGuide';
 export { handleWorkflowAdvance, type WorkflowAdvanceParams, type WorkflowAdvanceOptions } from './workflowAdvance';
 export { handleWorkflowManage, type WorkflowManageParams, type WorkflowManageOptions } from './workflowManage';
 

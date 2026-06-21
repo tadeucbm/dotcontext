@@ -50,7 +50,7 @@ The default export registers handlers through Pi's `ExtensionAPI`:
 | --- | --- | --- |
 | `session_start` | `context` → `check` (+ optional navigation excerpt) | Inject bootstrap message or resource when `.context/` exists |
 | `tool_execution_end` | `harness` → `appendTrace` for write/edit/bash tools | Silent durable trace under `.context/runtime/` |
-| `agent_end` | `workflow-status` | Optional UI notification with PREVC phase summary |
+| `agent_end` | `workflow-guide` | Optional UI notification with PREVC next steps, skills, and gate hints |
 
 When `.context/` is missing, `session_start` injects a one-line hint to initialize context through MCP.
 

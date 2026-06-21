@@ -4,7 +4,7 @@
  * Type definitions for MCP gateway tool parameters and responses.
  *
  * Note: Some gateways use dedicated tools instead of action-based routing:
- * - Workflow: Split into workflow-init, workflow-status, workflow-advance, workflow-manage
+ * - Workflow: Split into workflow-init, workflow-status, workflow-guide, workflow-advance, workflow-manage
  * - Project: Removed - use context init + workflow-init instead
  */
 
@@ -26,7 +26,7 @@ import type {
 } from '../../harness';
 
 // Action types for each gateway
-// Note: Workflow uses dedicated tools (workflow-init, workflow-status, workflow-advance, workflow-manage)
+// Note: Workflow uses dedicated tools (workflow-init, workflow-status, workflow-guide, workflow-advance, workflow-manage)
 // Note: Project tools removed - use context init + workflow-init instead
 export type ExploreAction = RuntimeHarnessExploreAction;
 export type ContextAction = RuntimeHarnessContextAction;
