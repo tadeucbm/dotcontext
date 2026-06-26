@@ -55,6 +55,20 @@ describe('hook install services', () => {
     await fs.remove(tempDir);
   });
 
+  it('defaults direct hook installs to project-local config paths', async () => {
+    const claudeResult = await installClaudeCodeHooks({
+      repoPath: tempDir,
+    });
+    const codexResult = await installCodexHooks({
+      repoPath: tempDir,
+    });
+
+    expect(claudeResult.configPath).toBe(path.join(tempDir, '.claude', 'settings.json'));
+    expect(codexResult.configPath).toBe(path.join(tempDir, '.codex', 'hooks.json'));
+    expect(await fs.pathExists(claudeResult.configPath)).toBe(true);
+    expect(await fs.pathExists(codexResult.configPath)).toBe(true);
+  });
+
   it('previews Claude Code hooks merged into settings.json', async () => {
     const configPath = path.join(tempDir, '.claude', 'settings.json');
     await fs.outputJson(configPath, {

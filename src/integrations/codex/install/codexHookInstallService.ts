@@ -36,21 +36,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function resolveJsonConfigPath(options: CodexHookInstallOptions): string {
-  if (options.global === false) {
-    const repoPath = path.resolve(options.repoPath ?? process.cwd());
-    return path.join(repoPath, '.codex', 'hooks.json');
+  if (options.global === true) {
+    return path.join(os.homedir(), '.codex', 'hooks.json');
   }
 
-  return path.join(os.homedir(), '.codex', 'hooks.json');
+  const repoPath = path.resolve(options.repoPath ?? process.cwd());
+  return path.join(repoPath, '.codex', 'hooks.json');
 }
 
 function resolveTomlConfigPath(options: CodexHookInstallOptions): string {
-  if (options.global === false) {
-    const repoPath = path.resolve(options.repoPath ?? process.cwd());
-    return path.join(repoPath, '.codex', 'config.toml');
+  if (options.global === true) {
+    return path.join(os.homedir(), '.codex', 'config.toml');
   }
 
-  return path.join(os.homedir(), '.codex', 'config.toml');
+  const repoPath = path.resolve(options.repoPath ?? process.cwd());
+  return path.join(repoPath, '.codex', 'config.toml');
 }
 
 function entryUsesDotcontextCommand(entry: CodexHookMatcherEntry): boolean {

@@ -385,13 +385,16 @@ Lifecycle hooks bootstrap context, append durable traces after file edits, and s
 npx -y @dotcontext/cli@latest hook install
 ```
 
+Hook install writes project-level configuration by default. Use `--global` only when you intentionally want home-directory hook config.
+
 Examples:
 
 ```bash
 npx -y @dotcontext/cli@latest hook install claude-code --dry-run
-npx -y @dotcontext/cli@latest hook install codex --local
-npx -y @dotcontext/cli@latest hook install codex --local --format toml
-npx -y @dotcontext/cli@latest hook install pi --local
+npx -y @dotcontext/cli@latest hook install codex
+npx -y @dotcontext/cli@latest hook install codex --format toml
+npx -y @dotcontext/cli@latest hook install pi
+npx -y @dotcontext/cli@latest hook install claude-code --global
 ```
 
 | Host | Config | Dispatch |

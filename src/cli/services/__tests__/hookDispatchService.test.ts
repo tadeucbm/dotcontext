@@ -309,4 +309,33 @@ describe('HookDispatchService session lifecycle', () => {
       expect(stopResult.output).toEqual({ continue: true });
     }
   );
+
+  it('keeps Codex Stop hooks silent during session-end reentry', async () => {
+    const workflowService = await WorkflowService.create(tempDir);
+    await workflowService.init({
+      name: 'feature-x',
+      scale: 'SMALL',
+    });
+
+    const stopStdin = PassThrough.from([
+      JSON.stringify({
+        session_id: 'host-session-codex-stop-reentry',
+        cwd: tempDir,
+        hook_event_name: 'Stop',
+        sessionEndActive: true,
+      }),
+    ]);
+    const stopStdout = new PassThrough();
+    stopStdout.on('data', () => {});
+
+    const stopResult = await runHookDispatch({
+      source: 'codex',
+      repoPath: tempDir,
+      stdin: stopStdin,
+      stdout: stopStdout,
+    });
+
+    expect(stopResult.exitCode).toBe(0);
+    expect(stopResult.output).toEqual({ continue: true });
+  });
 });

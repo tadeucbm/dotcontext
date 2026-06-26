@@ -143,6 +143,54 @@ describe('hook mapper unit tests', () => {
         continue: true,
       });
     });
+
+    it('suppresses Stop guidance during reentry', () => {
+      const output = mapClaudeCodeResponse(
+        { ...stopFixture, stop_hook_active: true },
+        {
+          ok: true,
+          tool: 'workflow-guide',
+          source: 'claude-code',
+          result: {
+            kind: 'json',
+            data: {
+              workflow: { active: true },
+              excerpt: 'dotcontext workflow guide:\nWorkflow "feature-x" - phase V.',
+            },
+          },
+        }
+      );
+
+      expect(output).toEqual({
+        source: 'claude-code',
+        continue: true,
+      });
+    });
+  });
+
+  describe('mapCodexResponse', () => {
+    it('suppresses Stop guidance during reentry', () => {
+      const output = mapCodexResponse(
+        { ...codexStopFixture, sessionEndActive: true },
+        {
+          ok: true,
+          tool: 'workflow-guide',
+          source: 'codex',
+          result: {
+            kind: 'json',
+            data: {
+              workflow: { active: true },
+              excerpt: 'dotcontext workflow guide:\nWorkflow "feature-x" - phase V.',
+            },
+          },
+        }
+      );
+
+      expect(output).toEqual({
+        source: 'codex',
+        continue: true,
+      });
+    });
   });
 
   describe('mapHostHookResponse', () => {
@@ -230,6 +278,34 @@ describe('hook mapper unit tests', () => {
             data: {
               workflow: { active: false },
               excerpt: 'dotcontext workflow guide:\nNo active PREVC workflow.',
+            },
+          },
+        }
+      );
+
+      expect(output).toEqual({
+        source: 'pi-dev',
+        silent: true,
+      });
+    });
+
+    it('suppresses agent_end workflow guidance during reentry', () => {
+      const output = mapPiResponse(
+        {
+          type: 'agent_end',
+          cwd: '/tmp/repo',
+          sessionId: 'pi-1',
+          agentEndActive: true,
+        },
+        {
+          ok: true,
+          tool: 'workflow-guide',
+          source: 'pi-dev',
+          result: {
+            kind: 'json',
+            data: {
+              workflow: { active: true },
+              excerpt: 'dotcontext workflow guide:\nWorkflow "feature-x" - phase V.',
             },
           },
         }

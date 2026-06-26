@@ -116,8 +116,9 @@ Target a specific host or preview changes:
 
 ```bash
 npx -y @dotcontext/cli@latest hook install claude-code --dry-run
-npx -y @dotcontext/cli@latest hook install codex --local
-npx -y @dotcontext/cli@latest hook install codex --local --format toml
+npx -y @dotcontext/cli@latest hook install codex
+npx -y @dotcontext/cli@latest hook install codex --format toml
+npx -y @dotcontext/cli@latest hook install claude-code --global
 ```
 
 | Host | What gets written | After install |
@@ -126,7 +127,7 @@ npx -y @dotcontext/cli@latest hook install codex --local --format toml
 | `codex` | `.codex/hooks.json` or inline `[[hooks.*]]` in `.codex/config.toml` | Run `/hooks` and trust project hooks |
 | `pi` | Instructions + optional `.mcp.json` snippet | Run `pi install npm:@dotcontext/pi` |
 
-Hook install flags mirror MCP install where applicable: `--global` (default), `--local`, `--dry-run`, and `-v, --verbose`. Codex also accepts `--format json|toml`.
+Hook install writes project-level config by default. Use `--global` for home-directory hook config, `--dry-run` to preview changes, and `-v, --verbose` for detailed output. Codex also accepts `--format json|toml`.
 
 Actions are logged to `.context/logs/hook-install.log`. See [Using dotcontext with hooks](/guides/using-with-hooks/) for lifecycle details.
 
@@ -135,7 +136,7 @@ Actions are logged to `.context/logs/hook-install.log`. See [Using dotcontext wi
 Pi uses an in-process npm extension instead of shell hook dispatch:
 
 ```bash
-npx -y @dotcontext/cli@latest hook install pi --local
+npx -y @dotcontext/cli@latest hook install pi
 pi install npm:@dotcontext/pi
 ```
 

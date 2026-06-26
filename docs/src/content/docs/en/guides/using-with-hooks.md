@@ -17,14 +17,14 @@ Use **hooks** for low-token bootstrap, tracing, and workflow reminders. Use **MC
 
 | Host | Install command | Config location |
 | --- | --- | --- |
-| Claude Code | `dotcontext hook install claude-code` | `~/.claude/settings.json` or `.claude/settings.json` |
-| Codex CLI | `dotcontext hook install codex` | `.codex/hooks.json`, `~/.codex/hooks.json`, or inline in `.codex/config.toml` |
+| Claude Code | `dotcontext hook install claude-code` | `.claude/settings.json` by default, or `~/.claude/settings.json` with `--global` |
+| Codex CLI | `dotcontext hook install codex` | `.codex/hooks.json` by default, or inline `.codex/config.toml` with `--format toml` |
 
 Pi uses an in-process extension instead of shell hooks. See [Using dotcontext with Pi](/guides/using-with-pi/).
 
 ## Install hooks
 
-The hook installer mirrors MCP install flags:
+The hook installer writes project-local config by default:
 
 ```bash
 # Interactive — detects installed hosts
@@ -33,8 +33,11 @@ npx -y @dotcontext/cli@latest hook install
 # Target a specific host
 npx -y @dotcontext/cli@latest hook install claude-code
 
-# Project-local config
-npx -y @dotcontext/cli@latest hook install codex --local
+# Inline Codex TOML config
+npx -y @dotcontext/cli@latest hook install codex --format toml
+
+# Home-directory config
+npx -y @dotcontext/cli@latest hook install claude-code --global
 
 # Preview without writing
 npx -y @dotcontext/cli@latest hook install claude-code --dry-run --verbose
@@ -45,8 +48,8 @@ npx -y @dotcontext/cli@latest hook install claude-code --dry-run --verbose
 | Flag | Description | Default |
 | --- | --- | --- |
 | `[host]` | Target `claude-code`, `codex`, or `pi` (omit to choose interactively) | prompts |
-| `-g, --global` | Write to the global (home directory) config | `true` |
-| `-l, --local` | Write to the local/repo-level config | — |
+| `-g, --global` | Write to the global (home directory) config | — |
+| `-l, --local` | Write to the local/repo-level config | `true` |
 | `--dry-run` | Preview changes without writing files | — |
 | `--format json\|toml` | Codex only: separate `hooks.json` vs inline TOML blocks | `json` |
 | `-v, --verbose` | Verbose output | — |
@@ -64,7 +67,7 @@ All supported hosts run the same harness actions; only the event envelope differ
 | Post tool use (Write / Edit / Bash) | `harness` → `appendTrace` | Append durable trace under `.context/runtime/` |
 | Stop / session end | `workflow-guide` | Inject compact PREVC next steps, skills, and gate hints only when an active PREVC workflow exists |
 
-Hooks are **non-blocking by default**. Harness errors do not stop your agent session.
+Hooks are **non-blocking by default**. Harness errors do not stop your agent session. Stop/session-end hooks also stay silent when no PREVC workflow is active, and reentrant stop calls from the host are treated as successful no-ops so hook feedback cannot create an end-of-turn loop.
 
 ## Claude Code
 
@@ -108,7 +111,7 @@ The installer writes either:
 For TOML install:
 
 ```bash
-npx -y @dotcontext/cli@latest hook install codex --local --format toml
+npx -y @dotcontext/cli@latest hook install codex --format toml
 ```
 
 The installer also enables `[features].hooks = true` when that flag is missing.
@@ -126,8 +129,8 @@ Edit a file through Codex, then inspect `.context/runtime/sessions/*/trace.jsonl
 Remove dotcontext hook entries without touching unrelated config:
 
 ```bash
-npx -y @dotcontext/cli@latest hook uninstall claude-code --local
-npx -y @dotcontext/cli@latest hook uninstall codex --local --format toml
+npx -y @dotcontext/cli@latest hook uninstall claude-code
+npx -y @dotcontext/cli@latest hook uninstall codex --format toml
 ```
 
 Use `--dry-run` to preview removals first.
@@ -151,9 +154,9 @@ Recommended setup for Claude Code or Codex CLI:
 2. Install hooks for background bootstrap and tracing:
 
    ```bash
-   npx -y @dotcontext/cli@latest hook install claude-code --local
+   npx -y @dotcontext/cli@latest hook install claude-code
    # or
-   npx -y @dotcontext/cli@latest hook install codex --local
+   npx -y @dotcontext/cli@latest hook install codex
    ```
 
 3. Initialize context through your agent (MCP `context init`), then let hooks keep sessions and traces warm on every subsequent start.

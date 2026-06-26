@@ -18,6 +18,11 @@ export interface PiAgentEndEvent {
   type: 'agent_end';
   cwd?: string;
   sessionId?: string;
+  agentEndActive?: boolean | string | number;
+  sessionEndActive?: boolean | string | number;
+  stopHookActive?: boolean | string | number;
+  reentry?: boolean | string | number;
+  reentrant?: boolean | string | number;
 }
 
 export interface PiHarnessCreateSessionEvent {

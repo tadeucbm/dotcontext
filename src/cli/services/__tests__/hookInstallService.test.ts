@@ -115,10 +115,9 @@ describe('HookInstallService', () => {
   });
 
   describe('runInstall', () => {
-    it('installs Claude Code hooks locally', async () => {
+    it('installs Claude Code hooks in the project by default', async () => {
       const result = await service.runInstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
         dryRun: false,
       });
@@ -144,7 +143,6 @@ describe('HookInstallService', () => {
     it('supports dry-run mode for Claude Code', async () => {
       const result = await service.runInstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
         dryRun: true,
         verbose: true,
@@ -158,13 +156,11 @@ describe('HookInstallService', () => {
     it('skips when Claude Code hooks are already configured', async () => {
       await service.runInstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
       });
 
       const result = await service.runInstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
       });
 
@@ -172,10 +168,9 @@ describe('HookInstallService', () => {
       expect(result.installations[0].action).toBe('skipped');
     });
 
-    it('installs Codex hooks as JSON locally', async () => {
+    it('installs Codex hooks as JSON in the project by default', async () => {
       const result = await service.runInstall({
         host: 'codex',
-        global: false,
         repoPath: tempDir,
         dryRun: false,
       });
@@ -232,7 +227,6 @@ describe('HookInstallService', () => {
     it('appends to hook-install.log', async () => {
       await service.runInstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
       });
 
@@ -243,6 +237,7 @@ describe('HookInstallService', () => {
       const entry = JSON.parse(lines[lines.length - 1]);
       expect(entry.operation).toBe('install');
       expect(entry.host).toBe('claude-code');
+      expect(entry.global).toBe(false);
     });
 
     it('shows error for unsupported host', async () => {
@@ -260,13 +255,11 @@ describe('HookInstallService', () => {
     it('removes Claude Code hook entries', async () => {
       await service.runInstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
       });
 
       const result = await service.runUninstall({
         host: 'claude-code',
-        global: false,
         repoPath: tempDir,
       });
 

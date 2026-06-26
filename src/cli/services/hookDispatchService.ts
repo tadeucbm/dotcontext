@@ -19,6 +19,7 @@ import {
   ensureHookHarnessSession,
   extractHarnessSessionId,
   getHookHarnessSessionId,
+  isSessionEndReentry,
   normalizeToolEvent,
   resolveHarnessHookFromHostEvent,
   saveHookHarnessSession,
@@ -116,10 +117,6 @@ function canonicalizeHookEventName(hookEventName?: string): string | undefined {
     default:
       return hookEventName;
   }
-}
-
-function isStopHookReentry(envelope: Record<string, unknown>): boolean {
-  return envelope.stop_hook_active === true;
 }
 
 function appendNavigationContext(
@@ -291,7 +288,7 @@ async function dispatchShellHookEvent(
     throw new Error('Hook dispatch requires hook_event_name');
   }
 
-  if ((hookEventName === 'Stop' || hookEventName === 'SubagentStop') && isStopHookReentry(envelope)) {
+  if ((hookEventName === 'Stop' || hookEventName === 'SubagentStop') && isSessionEndReentry(envelope)) {
     return {
       response: {
         ok: true,

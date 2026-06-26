@@ -2,6 +2,7 @@ import type { HarnessHookResponse } from '../../../harness';
 
 import { extractHarnessSessionId } from '../../shared/extractHarnessSessionId';
 import { formatNavigationExcerpt } from '../../shared/formatNavigationExcerpt';
+import { isSessionEndReentry } from '../../shared/sessionEndReentry';
 
 import type { PiDevHookEvent } from './mapPiEvent';
 
@@ -92,6 +93,10 @@ export function mapPiResponse(
   }
 
   if (event.type === 'tool_execution_end') {
+    return { source: 'pi-dev', silent: true };
+  }
+
+  if (event.type === 'agent_end' && isSessionEndReentry(event)) {
     return { source: 'pi-dev', silent: true };
   }
 

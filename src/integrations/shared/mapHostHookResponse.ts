@@ -98,9 +98,13 @@ function mapSuccessResponse(
 export function mapHostHookResponse(
   hostEventName: string,
   response: HarnessHookResponse,
-  options?: { source?: HarnessHookSource }
+  options?: { source?: HarnessHookSource; suppressAdditionalContext?: boolean }
 ): HostHookOutput {
   const output: HostHookOutput = options?.source ? { source: options.source } : {};
+
+  if (options?.suppressAdditionalContext) {
+    return { ...output, continue: true };
+  }
 
   if (!response.ok) {
     return { ...output, continue: true };

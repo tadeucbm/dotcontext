@@ -15,8 +15,8 @@ Use **hooks** para bootstrap, tracing e lembretes (baixo custo de tokens). Use *
 
 | Host | Comando | Config |
 | --- | --- | --- |
-| Claude Code | `dotcontext hook install claude-code` | `~/.claude/settings.json` ou `.claude/settings.json` |
-| Codex CLI | `dotcontext hook install codex` | `.codex/hooks.json` ou inline em `config.toml` |
+| Claude Code | `dotcontext hook install claude-code` | `.claude/settings.json` por padrão, ou `~/.claude/settings.json` com `--global` |
+| Codex CLI | `dotcontext hook install codex` | `.codex/hooks.json` por padrão, ou `.codex/config.toml` com `--format toml` |
 
 Pi usa extensão in-process — veja [Usando dotcontext com Pi](/pt-br/guides/using-with-pi/).
 
@@ -24,11 +24,13 @@ Pi usa extensão in-process — veja [Usando dotcontext com Pi](/pt-br/guides/us
 
 ```bash
 npx -y @dotcontext/cli@latest hook install
-npx -y @dotcontext/cli@latest hook install claude-code --local
+npx -y @dotcontext/cli@latest hook install claude-code
+npx -y @dotcontext/cli@latest hook install codex --format toml
+npx -y @dotcontext/cli@latest hook install claude-code --global
 npx -y @dotcontext/cli@latest hook install codex --dry-run
 ```
 
-Flags: `--global`, `--local`, `--dry-run`, `--format json|toml` (Codex), `-v`. Logs em `.context/logs/hook-install.log`.
+Por padrão, a instalação escreve config no projeto atual. Use `--global` para escrever no diretório home. Flags: `--global`, `--local`, `--dry-run`, `--format json|toml` (Codex), `-v`. Logs em `.context/logs/hook-install.log`.
 
 ## O que os hooks fazem
 
@@ -39,7 +41,7 @@ Flags: `--global`, `--local`, `--dry-run`, `--format json|toml` (Codex), `-v`. L
 | Pós ferramenta (Write/Edit/Bash) | `harness` → `appendTrace` | Trace em `.context/runtime/` |
 | Stop / fim | `workflow-guide` | Próximos passos, skills e dicas de gate PREVC somente quando existe um workflow PREVC ativo |
 
-Hooks são **não bloqueantes** por padrão.
+Hooks são **não bloqueantes** por padrão. Stop/fim fica silencioso sem workflow PREVC ativo, e chamadas reentrantes de fim são tratadas como no-ops para evitar loops de encerramento.
 
 ## Codex: confiar nos hooks
 

@@ -313,7 +313,7 @@ const hookCommand = program
 hookCommand
   .command('install [host]')
   .description(t('commands.hookInstall.description'))
-  .option('-g, --global', t('commands.hookInstall.options.global'), true)
+  .option('-g, --global', t('commands.hookInstall.options.global'))
   .option('-l, --local', t('commands.hookInstall.options.local'))
   .option('--dry-run', t('commands.hookInstall.options.dryRun'))
   .option('--format <format>', t('commands.hookInstall.options.format'), 'json')
@@ -376,7 +376,7 @@ hookCommand
 hookCommand
   .command('uninstall [host]')
   .description(t('commands.hookUninstall.description'))
-  .option('-g, --global', t('commands.hookInstall.options.global'), true)
+  .option('-g, --global', t('commands.hookInstall.options.global'))
   .option('-l, --local', t('commands.hookInstall.options.local'))
   .option('--dry-run', t('commands.hookInstall.options.dryRun'))
   .option('--format <format>', t('commands.hookInstall.options.format'), 'json')

@@ -40,6 +40,7 @@ export {
 
 export { extractHarnessSessionId } from './extractHarnessSessionId';
 export { formatNavigationExcerpt } from './formatNavigationExcerpt';
+export { isSessionEndReentry } from './sessionEndReentry';
 
 export type {
   HarnessHookEvent,
