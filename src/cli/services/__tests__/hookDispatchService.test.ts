@@ -277,4 +277,36 @@ describe('HookDispatchService session lifecycle', () => {
       },
     });
   });
+
+  it.each(['Stop', 'SubagentStop'])(
+    'keeps %s hooks silent during Claude Code stop hook reentry',
+    async (hookEventName) => {
+      const workflowService = await WorkflowService.create(tempDir);
+      await workflowService.init({
+        name: 'feature-x',
+        scale: 'SMALL',
+      });
+
+      const stopStdin = PassThrough.from([
+        JSON.stringify({
+          session_id: 'host-session-stop-reentry',
+          cwd: tempDir,
+          hook_event_name: hookEventName,
+          stop_hook_active: true,
+        }),
+      ]);
+      const stopStdout = new PassThrough();
+      stopStdout.on('data', () => {});
+
+      const stopResult = await runHookDispatch({
+        source: 'claude-code',
+        repoPath: tempDir,
+        stdin: stopStdin,
+        stdout: stopStdout,
+      });
+
+      expect(stopResult.exitCode).toBe(0);
+      expect(stopResult.output).toEqual({ continue: true });
+    }
+  );
 });

@@ -110,9 +110,16 @@ function canonicalizeHookEventName(hookEventName?: string): string | undefined {
       return 'PostToolUse';
     case 'stop':
       return 'Stop';
+    case 'subagentstop':
+    case 'subagent_stop':
+      return 'SubagentStop';
     default:
       return hookEventName;
   }
+}
+
+function isStopHookReentry(envelope: Record<string, unknown>): boolean {
+  return envelope.stop_hook_active === true;
 }
 
 function appendNavigationContext(
@@ -282,6 +289,24 @@ async function dispatchShellHookEvent(
 
   if (!hookEventName) {
     throw new Error('Hook dispatch requires hook_event_name');
+  }
+
+  if ((hookEventName === 'Stop' || hookEventName === 'SubagentStop') && isStopHookReentry(envelope)) {
+    return {
+      response: {
+        ok: true,
+        tool: 'workflow-guide',
+        source,
+        result: {
+          kind: 'json',
+          data: {
+            skipped: true,
+            reason: 'stop_hook_reentry',
+          },
+        },
+      },
+      output: { continue: true },
+    };
   }
 
   if (hookEventName === 'SessionStart') {

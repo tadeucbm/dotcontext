@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Reduced host hook noise: Stop/session-end hooks now emit PREVC workflow guidance only when an active workflow exists.
+- Prevented Claude Code Stop/SubagentStop hook reentry loops by silently continuing when `stop_hook_active` is true.
 - Kept `hook dispatch` stdout machine-readable by skipping the global update check for hook dispatch commands.
 - Prevented `SessionStart` hooks from creating `.context/runtime` before context initialization has been confirmed.
 - Made hook tracing more resilient by recovering stale hook session bindings and treating trace append failures as non-blocking.
