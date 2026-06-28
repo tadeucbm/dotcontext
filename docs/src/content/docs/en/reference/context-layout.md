@@ -7,7 +7,7 @@ sidebar:
 
 Everything dotcontext knows about your project lives in a single directory at the repo root: `.context/`. This page is the exhaustive reference for what lives where — every directory and file, its classification, and whether git tracks it.
 
-If you want the *why* behind this layout (the split between authored config and generated runtime state), read [The .context convention](/concepts/context-convention/) first. This page is the *what*.
+If you want the *why* behind this layout (the split between authored config and generated runtime state), read [The .context convention](/en/concepts/context-convention/) first. This page is the *what*.
 
 ## Classification at a glance
 
@@ -49,8 +49,8 @@ These files govern how the harness behaves. You write them, you review them, and
 | --- | --- | --- | --- |
 | `.context/config.json` | versioned | Yes | Context-generation configuration persisted so scaffolding is repeatable across checkouts. |
 | `.context/config/` | versioned | Yes | The authored config directory. |
-| `.context/config/policy.json` | versioned | Yes | Harness [policy](/concepts/policies/) rules and approval constraints. |
-| `.context/config/sensors.json` | versioned | Yes | Project [sensor](/concepts/sensors/) catalog plus detected stack info. Generated at bootstrap, then customized by the team. |
+| `.context/config/policy.json` | versioned | Yes | Harness [policy](/en/concepts/policies/) rules and approval constraints. |
+| `.context/config/sensors.json` | versioned | Yes | Project [sensor](/en/concepts/sensors/) catalog plus detected stack info. Generated at bootstrap, then customized by the team. |
 
 ## Durable project knowledge
 
@@ -75,7 +75,7 @@ Everything under `.context/runtime/` and `.context/cache/` is produced by the ha
 
 ### Sessions
 
-One folder per [harness session](/concepts/harness-runtime/), holding its record, event log, and artifacts.
+One folder per [harness session](/en/concepts/harness-runtime/), holding its record, event log, and artifacts.
 
 | Path | Classification | Git-tracked | Purpose |
 | --- | --- | --- | --- |
@@ -86,7 +86,7 @@ One folder per [harness session](/concepts/harness-runtime/), holding its record
 
 ### Workflows
 
-PREVC workflow state and supporting records. See the [PREVC workflow](/concepts/prevc-workflow/) concept.
+PREVC workflow state and supporting records. See the [PREVC workflow](/en/concepts/prevc-workflow/) concept.
 
 | Path | Classification | Git-tracked | Purpose |
 | --- | --- | --- | --- |
@@ -99,7 +99,7 @@ PREVC workflow state and supporting records. See the [PREVC workflow](/concepts/
 
 ### Contracts
 
-[Task contracts and handoffs](/concepts/task-contracts/) that gate completion and formalize role transitions.
+[Task contracts and handoffs](/en/concepts/task-contracts/) that gate completion and formalize role transitions.
 
 | Path | Classification | Git-tracked | Purpose |
 | --- | --- | --- | --- |
@@ -109,7 +109,7 @@ PREVC workflow state and supporting records. See the [PREVC workflow](/concepts/
 
 ### Evaluations
 
-[Replay and failure-dataset](/concepts/replay-and-datasets/) artifacts.
+[Replay and failure-dataset](/en/concepts/replay-and-datasets/) artifacts.
 
 | Path | Classification | Git-tracked | Purpose |
 | --- | --- | --- | --- |
@@ -167,6 +167,6 @@ You do not run migration manually. It happens the first time the CLI, harness, o
 
 ## See also
 
-- [The .context convention](/concepts/context-convention/) — the reasoning behind this layout.
-- [Sensors](/concepts/sensors/) and [Policies](/concepts/policies/) — the two authored config files in depth.
-- [Harness runtime](/concepts/harness-runtime/) — what generates the runtime state.
+- [The .context convention](/en/concepts/context-convention/) — the reasoning behind this layout.
+- [Sensors](/en/concepts/sensors/) and [Policies](/en/concepts/policies/) — the two authored config files in depth.
+- [Harness runtime](/en/concepts/harness-runtime/) — what generates the runtime state.

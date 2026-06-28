@@ -10,7 +10,7 @@ The Model Context Protocol (MCP) is the recommended way to use dotcontext. Inste
 This guide walks through installing the server, connecting a client, the mandatory index-first workflow, and the tools you'll use most — with example prompts you can adapt.
 
 :::tip[New to dotcontext?]
-If you haven't installed anything yet, start with the [Quickstart](/getting-started/quickstart/). This page assumes you want a practical, prompt-driven walkthrough of the MCP surface.
+If you haven't installed anything yet, start with the [Quickstart](/en/getting-started/quickstart/). This page assumes you want a practical, prompt-driven walkthrough of the MCP surface.
 :::
 
 ## Why MCP first
@@ -73,7 +73,7 @@ The config it writes is the same for every tool:
 By default the installer writes to your global (home directory) config. Use `--local` to write a project-level config instead (for example `.mcp.json` or a tool-specific directory). Use `--dry-run` to preview either path before committing.
 :::
 
-For the full client list, config locations, and flags, see [Installation](/getting-started/installation/).
+For the full client list, config locations, and flags, see [Installation](/en/getting-started/installation/).
 
 ## 2. Connect an AI client
 
@@ -111,7 +111,7 @@ The agent translates that into `context` (`init` → `fillSingle` …) followed 
 
 ## 4. The consolidated tools at a glance
 
-dotcontext groups its capabilities into a small set of consolidated tools. Each takes an `action` parameter that selects the operation. Below is the high-level map with example prompts; the full action and parameter tables live in the [MCP tools reference](/reference/mcp-tools/).
+dotcontext groups its capabilities into a small set of consolidated tools. Each takes an `action` parameter that selects the operation. Below is the high-level map with example prompts; the full action and parameter tables live in the [MCP tools reference](/en/reference/mcp-tools/).
 
 ### explore — read and search code
 
@@ -177,7 +177,7 @@ That maps to `workflow-init` (with `scale: "MEDIUM"`, `require_plan: true`), `wo
 If you set `require_plan` or `require_approval`, the corresponding transition is gated until the plan or approval exists. `workflow-advance` reports the gate result; pass `force: true` only when you intentionally want to bypass it.
 :::
 
-To learn how phases, scale, and roles fit together, read [The PREVC workflow](/concepts/prevc-workflow/).
+To learn how phases, scale, and roles fit together, read [The PREVC workflow](/en/concepts/prevc-workflow/).
 
 ## 6. MCP resources
 
@@ -206,7 +206,7 @@ Each step maps to one or more of the tools above, and every action is recorded a
 
 ## Next steps
 
-- [MCP tools reference](/reference/mcp-tools/) — full action and parameter tables for every tool.
-- [Quickstart](/getting-started/quickstart/) — the shortest path from install to your first workflow.
-- [The PREVC workflow](/concepts/prevc-workflow/) — phases, scale, roles, and gates explained.
-- [Installation](/getting-started/installation/) — every supported client and config location.
+- [MCP tools reference](/en/reference/mcp-tools/) — full action and parameter tables for every tool.
+- [Quickstart](/en/getting-started/quickstart/) — the shortest path from install to your first workflow.
+- [The PREVC workflow](/en/concepts/prevc-workflow/) — phases, scale, roles, and gates explained.
+- [Installation](/en/getting-started/installation/) — every supported client and config location.

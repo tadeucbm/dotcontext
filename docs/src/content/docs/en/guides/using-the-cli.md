@@ -5,12 +5,12 @@ sidebar:
   order: 2
 ---
 
-The dotcontext CLI is the **operator-facing** surface of the runtime. Where the [MCP server](/guides/using-with-mcp/) gives your coding agent live, in-loop access to context and the PREVC workflow, the CLI is what *you* run from a terminal to move artifacts between `.context/` and your AI tools, install the MCP server, and inspect workflow progress.
+The dotcontext CLI is the **operator-facing** surface of the runtime. Where the [MCP server](/en/guides/using-with-mcp/) gives your coding agent live, in-loop access to context and the PREVC workflow, the CLI is what *you* run from a terminal to move artifacts between `.context/` and your AI tools, install the MCP server, and inspect workflow progress.
 
 A good mental model: **MCP creates and fills context; the CLI distributes and inspects it.**
 
 ::: tip[Recommended path]
-Most users never need to install the CLI globally. Run it on demand with `npx`, and use the [MCP install flow](/guides/using-with-mcp/) for the parts that benefit from an agent (init, fill, plan, analyze).
+Most users never need to install the CLI globally. Run it on demand with `npx`, and use the [MCP install flow](/en/guides/using-with-mcp/) for the parts that benefit from an agent (init, fill, plan, analyze).
 :::
 
 ## Invocation
@@ -62,7 +62,7 @@ Interactive mode is the friendliest entry point. Every action it performs maps t
 
 ## Core commands
 
-The CLI's public surface is focused on **sync, import/export, MCP setup, and reporting**. For the full flag-by-flag breakdown, see the [CLI reference](/reference/cli-commands/).
+The CLI's public surface is focused on **sync, import/export, MCP setup, and reporting**. For the full flag-by-flag breakdown, see the [CLI reference](/en/reference/cli-commands/).
 
 ### Sync agents to your tools
 
@@ -183,7 +183,7 @@ dotcontext mcp:install --local --dry-run
 dotcontext mcp:install codex --with-hooks
 ```
 
-Options: `[tool]` (omit to be prompted), `-g, --global` (default), `-l, --local`, `--dry-run`, `--with-hooks`, `--no-hooks`, `--hook-format json|toml`, and `-v, --verbose`. Hooks are recommended and optional for Claude Code, Codex CLI, and Pi; they install project-local config by default. See [Using dotcontext with MCP](/guides/using-with-mcp/) for the full list of supported tools and config paths.
+Options: `[tool]` (omit to be prompted), `-g, --global` (default), `-l, --local`, `--dry-run`, `--with-hooks`, `--no-hooks`, `--hook-format json|toml`, and `-v, --verbose`. Hooks are recommended and optional for Claude Code, Codex CLI, and Pi; they install project-local config by default. See [Using dotcontext with MCP](/en/guides/using-with-mcp/) for the full list of supported tools and config paths.
 
 ### Uninstall MCP config
 
@@ -237,14 +237,14 @@ This is the most important thing to internalize. **Context creation, AI-generate
 The CLI surface is deliberately **sync- and admin-focused**: it distributes artifacts between `.context/` and AI tool directories, manages low-level workflow state, and provides introspection utilities. Anything that needs a model to *generate* content is delegated to the MCP server.
 
 ::: caution
-`dotcontext admin workflow init "name"` exists, but it initializes **PREVC workflow state** — it does not scaffold the `.context/` directory. To create context, use the MCP `context` tool. See [Using dotcontext with MCP](/guides/using-with-mcp/).
+`dotcontext admin workflow init "name"` exists, but it initializes **PREVC workflow state** — it does not scaffold the `.context/` directory. To create context, use the MCP `context` tool. See [Using dotcontext with MCP](/en/guides/using-with-mcp/).
 :::
 
 ## Where to go next
 
-- [CLI commands reference](/reference/cli-commands/) — every command, flag, and default
-- [Using dotcontext with MCP](/guides/using-with-mcp/) — the agent-driven half of the product
-- [Installation](/getting-started/installation/) — install paths for CLI and MCP
-- [The `.context` convention](/concepts/context-convention/) — what the CLI is syncing
+- [CLI commands reference](/en/reference/cli-commands/) — every command, flag, and default
+- [Using dotcontext with MCP](/en/guides/using-with-mcp/) — the agent-driven half of the product
+- [Installation](/en/getting-started/installation/) — install paths for CLI and MCP
+- [The `.context` convention](/en/concepts/context-convention/) — what the CLI is syncing
 
 Source on [GitHub](https://github.com/vinilana/dotcontext).

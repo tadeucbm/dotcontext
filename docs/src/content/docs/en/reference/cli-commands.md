@@ -5,9 +5,9 @@ sidebar:
   order: 2
 ---
 
-This page is the **complete command reference** for the dotcontext CLI. For a guided, task-oriented walkthrough, start with [Using the CLI](/guides/using-the-cli/) — then come back here when you need the exact flag for a specific command.
+This page is the **complete command reference** for the dotcontext CLI. For a guided, task-oriented walkthrough, start with [Using the CLI](/en/guides/using-the-cli/) — then come back here when you need the exact flag for a specific command.
 
-A quick mental model before the tables: **MCP creates and fills context; the CLI distributes and inspects it.** The CLI surface is deliberately focused on *sync*, *import/export*, *MCP setup*, *reports*, and *low-level admin*. Context creation, AI-generated fills, and plan scaffolding live on the [MCP server](/reference/mcp-tools/) instead.
+A quick mental model before the tables: **MCP creates and fills context; the CLI distributes and inspects it.** The CLI surface is deliberately focused on *sync*, *import/export*, *MCP setup*, *reports*, and *low-level admin*. Context creation, AI-generated fills, and plan scaffolding live on the [MCP server](/en/reference/mcp-tools/) instead.
 
 ## Invocation
 
@@ -179,12 +179,12 @@ dotcontext mcp --repo-path /path/to/repo
 ```
 
 ::: note
-There is no separate global binary for the server in the published CLI package — the `dotcontext-mcp` bin only exists in the isolated `@dotcontext/mcp` package build. From the CLI, start the server with `dotcontext mcp`. See [Architecture](/about/architecture/) for how the surfaces are split.
+There is no separate global binary for the server in the published CLI package — the `dotcontext-mcp` bin only exists in the isolated `@dotcontext/mcp` package build. From the CLI, start the server with `dotcontext mcp`. See [Architecture](/en/about/architecture/) for how the surfaces are split.
 :::
 
 ### mcp:install
 
-Install (or update) the MCP server configuration for a supported AI tool. Run with no tool name to pick interactively; pass a tool name to target it directly. See [Installing with MCP](/guides/using-with-mcp/) for the full list of supported clients and config paths.
+Install (or update) the MCP server configuration for a supported AI tool. Run with no tool name to pick interactively; pass a tool name to target it directly. See [Installing with MCP](/en/guides/using-with-mcp/) for the full list of supported clients and config paths.
 
 MCP is the full dotcontext tool surface. For hook-capable targets, `mcp:install` can recommend lifecycle hooks after MCP config is handled. Hooks are recommended, optional, and non-blocking; they are eligible only for `claude` -> `claude-code`, `codex` -> `codex`, and `pi` -> `pi`.
 
@@ -290,7 +290,7 @@ dotcontext admin workflow role complete reviewer --outputs review.md
 ```
 
 ::: caution
-`admin workflow init` manages **workflow state**, not the `.context/` directory itself. Creating the context structure, filling docs, and scaffolding plans are MCP-first operations — see the [MCP tools reference](/reference/mcp-tools/) and the [PREVC workflow concept](/concepts/prevc-workflow/).
+`admin workflow init` manages **workflow state**, not the `.context/` directory itself. Creating the context structure, filling docs, and scaffolding plans are MCP-first operations — see the [MCP tools reference](/en/reference/mcp-tools/) and the [PREVC workflow concept](/en/concepts/prevc-workflow/).
 :::
 
 ### admin skill
@@ -335,14 +335,14 @@ By design, the standalone CLI does **not** provide commands to create context fr
 
 | Want to… | Use instead |
 | --- | --- |
-| Create the `.context/` structure | `context` MCP tool (`init`) — see [MCP tools](/reference/mcp-tools/) |
+| Create the `.context/` structure | `context` MCP tool (`init`) — see [MCP tools](/en/reference/mcp-tools/) |
 | Auto-fill docs and agents | `context` MCP tool (`fill`, `fillSingle`) |
 | Scaffold and track PREVC plans | `plan` MCP tool and `workflow-init` |
 | Analyze code / build semantic context | `context`/`explore` MCP tools |
 
 ## See also
 
-- [Using the CLI](/guides/using-the-cli/) — task-oriented walkthrough of the commands above
-- [Installing with MCP](/guides/using-with-mcp/) — set up the MCP server in your AI tool
-- [MCP tools reference](/reference/mcp-tools/) — the AI-facing surface
-- [Architecture](/about/architecture/) — how `cli`, `harness`, and `mcp` are split and published
+- [Using the CLI](/en/guides/using-the-cli/) — task-oriented walkthrough of the commands above
+- [Installing with MCP](/en/guides/using-with-mcp/) — set up the MCP server in your AI tool
+- [MCP tools reference](/en/reference/mcp-tools/) — the AI-facing surface
+- [Architecture](/en/about/architecture/) — how `cli`, `harness`, and `mcp` are split and published

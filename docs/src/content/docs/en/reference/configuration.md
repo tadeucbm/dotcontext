@@ -7,7 +7,7 @@ sidebar:
 
 dotcontext keeps a clear line between **authored configuration** and **generated runtime state**. Configuration lives under `.context/config/` (plus a top-level `.context/config.json`), it is meant to be committed to git, and it is shared by your whole team and every agent that touches the repo.
 
-This page is the reference for those files: what each one is for, its shape, and whether it's tracked in git. For the *concepts* behind them, see [Policies](/concepts/policies/) and [Sensors & backpressure](/concepts/sensors/).
+This page is the reference for those files: what each one is for, its shape, and whether it's tracked in git. For the *concepts* behind them, see [Policies](/en/concepts/policies/) and [Sensors & backpressure](/en/concepts/sensors/).
 
 ## The configuration files at a glance
 
@@ -18,7 +18,7 @@ This page is the reference for those files: what each one is for, its shape, and
 | `.context/config/sensors.json` | Sensor catalog for quality checks | Yes | Generated at bootstrap, edited by team |
 
 ::: tip[Commit your config]
-Everything under `.context/config/` and `.context/config.json` belongs in version control. That's what makes quality gates and policies reproducible: every teammate and every agent runs against the same rules. The generated `.context/runtime/` directory is gitignored — see [The harness runtime](/concepts/harness-runtime/) for the full layout.
+Everything under `.context/config/` and `.context/config.json` belongs in version control. That's what makes quality gates and policies reproducible: every teammate and every agent runs against the same rules. The generated `.context/runtime/` directory is gitignored — see [The harness runtime](/en/concepts/harness-runtime/) for the full layout.
 :::
 
 ## `.context/config.json`
@@ -30,7 +30,7 @@ Everything under `.context/config/` and `.context/config.json` belongs in versio
 This file is written when you scaffold context (the `context init` MCP action) and is read by the semantic context builders so that re-running generation produces consistent results. It captures the metadata that drove the original scaffold rather than runtime state.
 
 ::: note
-Context creation and fills are MCP-first — there is no standalone CLI command that authors `config.json`. It is produced and maintained through the MCP `context` tool. See [Using dotcontext with MCP](/guides/using-with-mcp/).
+Context creation and fills are MCP-first — there is no standalone CLI command that authors `config.json`. It is produced and maintained through the MCP `context` tool. See [Using dotcontext with MCP](/en/guides/using-with-mcp/).
 :::
 
 ## `.context/config/policy.json`
@@ -39,7 +39,7 @@ Context creation and fills are MCP-first — there is no standalone CLI command 
 
 **Classification:** versioned, git-tracked, authored by the team.
 
-Policies are how you encode "this kind of change needs review" or "never touch secrets" as data the runtime enforces, rather than a convention you hope an agent remembers. Read [Policies](/concepts/policies/) for the full model; this section documents the file shape.
+Policies are how you encode "this kind of change needs review" or "never touch secrets" as data the runtime enforces, rather than a convention you hope an agent remembers. Read [Policies](/en/concepts/policies/) for the full model; this section documents the file shape.
 
 ### Document shape
 
@@ -119,7 +119,7 @@ Order matters. Rules are evaluated top-to-bottom, and a `deny` rule that matches
 
 **Classification:** versioned, git-tracked. Generated at bootstrap from your detected stack, then customized by the team.
 
-Sensors turn "tests pass" from a claim into recorded evidence. The catalog is the single place that defines them. For the concept and how results feed phase gates, see [Sensors & backpressure](/concepts/sensors/).
+Sensors turn "tests pass" from a claim into recorded evidence. The catalog is the single place that defines them. For the concept and how results feed phase gates, see [Sensors & backpressure](/en/concepts/sensors/).
 
 ### Catalog shape
 
@@ -212,7 +212,7 @@ dotcontext is configured primarily through the files above rather than environme
 }
 ```
 
-The CLI exposes the equivalent runtime knobs as flags rather than environment variables — for example `-r, --repo-path <path>` and `-v, --verbose` on the `mcp` command. See the [CLI guide](/guides/using-the-cli/) for the full surface.
+The CLI exposes the equivalent runtime knobs as flags rather than environment variables — for example `-r, --repo-path <path>` and `-v, --verbose` on the `mcp` command. See the [CLI guide](/en/guides/using-the-cli/) for the full surface.
 
 ::: note
 If a configuration value isn't documented here, it isn't a supported knob — prefer the file-based configuration and CLI flags above over guessing at environment variables.
@@ -228,11 +228,11 @@ If a configuration value isn't documented here, it isn't a supported knob — pr
     └── sensors.json          # sensor catalog (versioned)
 ```
 
-Everything else the harness writes — sessions, workflow state, contracts, replays, datasets — lives under the gitignored `.context/runtime/` tree, covered in [The harness runtime](/concepts/harness-runtime/).
+Everything else the harness writes — sessions, workflow state, contracts, replays, datasets — lives under the gitignored `.context/runtime/` tree, covered in [The harness runtime](/en/concepts/harness-runtime/).
 
 ## Next steps
 
-- Learn the model behind `policy.json` in [Policies](/concepts/policies/).
-- Learn the model behind `sensors.json` in [Sensors & backpressure](/concepts/sensors/).
-- Tune both files hands-on in [Customizing sensors and policies](/guides/customizing-sensors-and-policies/).
-- See where generated state lives in [The harness runtime](/concepts/harness-runtime/).
+- Learn the model behind `policy.json` in [Policies](/en/concepts/policies/).
+- Learn the model behind `sensors.json` in [Sensors & backpressure](/en/concepts/sensors/).
+- Tune both files hands-on in [Customizing sensors and policies](/en/guides/customizing-sensors-and-policies/).
+- See where generated state lives in [The harness runtime](/en/concepts/harness-runtime/).

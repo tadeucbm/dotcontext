@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-This page is the exhaustive reference for the tools exposed by the dotcontext MCP server. If you want a practical, prompt-driven walkthrough instead, read [Using dotcontext with MCP](/guides/using-with-mcp/) first — then come back here when you need the exact action or parameter name.
+This page is the exhaustive reference for the tools exposed by the dotcontext MCP server. If you want a practical, prompt-driven walkthrough instead, read [Using dotcontext with MCP](/en/guides/using-with-mcp/) first — then come back here when you need the exact action or parameter name.
 
 dotcontext keeps its tool surface deliberately small. Instead of dozens of narrow tools, most capabilities are grouped under a handful of **consolidated gateway tools** that take an `action` parameter. A few **dedicated workflow tools** stand on their own because they are called constantly during PREVC.
 
@@ -117,7 +117,7 @@ Import/export synchronization between `.context/` and AI tool directories.
 **Returns:** sync operation status, artifact counts, and written file paths.
 
 :::note[CLI parity]
-The `sync` actions mirror the standalone CLI commands (`sync`, `reverse-sync`, `import-rules`, `export-rules`). See [Using the CLI](/guides/using-the-cli/) when you want to run them outside an MCP session.
+The `sync` actions mirror the standalone CLI commands (`sync`, `reverse-sync`, `import-rules`, `export-rules`). See [Using the CLI](/en/guides/using-the-cli/) when you want to run them outside an MCP session.
 :::
 
 ### plan
@@ -222,7 +222,7 @@ Explicit harness runtime operations — sessions, traces, artifacts, checkpoints
 **Returns:** session timelines, artifact inventories, task evaluations, sensor telemetry, replay records, failure clusters, or policy enforcement results.
 
 :::tip[Want the concepts behind these?]
-The harness entities are explained in depth under [Sessions, traces & artifacts](/concepts/harness-runtime/), [Sensors](/concepts/sensors/), [Policies](/concepts/policies/), [Task contracts & handoffs](/concepts/task-contracts/), and [Replay & failure datasets](/concepts/replay-and-datasets/).
+The harness entities are explained in depth under [Sessions, traces & artifacts](/en/concepts/harness-runtime/), [Sensors](/en/concepts/sensors/), [Policies](/en/concepts/policies/), [Task contracts & handoffs](/en/concepts/task-contracts/), and [Replay & failure datasets](/en/concepts/replay-and-datasets/).
 :::
 
 ## Dedicated workflow tools
@@ -351,11 +351,11 @@ To actually call these tools, install the MCP server into your AI client:
 npx @dotcontext/mcp install
 ```
 
-The installer supports 17 AI clients (Claude Code, Claude Desktop, Cursor, Windsurf, Continue.dev, VS Code / GitHub Copilot, Roo Code, Amazon Q Developer CLI, Google Gemini CLI, Codex CLI, Kiro, Zed, JetBrains IDEs, Trae AI, Kilo Code, GitHub Copilot CLI, and Pi). For the full setup and client-by-client details, see [Using dotcontext with MCP](/guides/using-with-mcp/).
+The installer supports 17 AI clients (Claude Code, Claude Desktop, Cursor, Windsurf, Continue.dev, VS Code / GitHub Copilot, Roo Code, Amazon Q Developer CLI, Google Gemini CLI, Codex CLI, Kiro, Zed, JetBrains IDEs, Trae AI, Kilo Code, GitHub Copilot CLI, and Pi). For the full setup and client-by-client details, see [Using dotcontext with MCP](/en/guides/using-with-mcp/).
 
 ## See also
 
-- [Using dotcontext with MCP](/guides/using-with-mcp/) — prompt-driven walkthrough of this surface
-- [The PREVC workflow](/concepts/prevc-workflow/) — phases, scales, and gates
-- [Using the CLI](/guides/using-the-cli/) — the sync/admin surface outside MCP
+- [Using dotcontext with MCP](/en/guides/using-with-mcp/) — prompt-driven walkthrough of this surface
+- [The PREVC workflow](/en/concepts/prevc-workflow/) — phases, scales, and gates
+- [Using the CLI](/en/guides/using-the-cli/) — the sync/admin surface outside MCP
 - [dotcontext on GitHub](https://github.com/vinilana/dotcontext)

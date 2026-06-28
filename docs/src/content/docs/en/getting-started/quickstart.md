@@ -10,7 +10,7 @@ This guide takes you from an empty repository to a running PREVC workflow in abo
 dotcontext is a harness for your harness: it gives your agent a durable contextual layer it can pick up later — shared context, a workflow with phases, and runtime state — no matter which AI tool you use. You'll mostly talk to the agent in plain English; under the hood it calls dotcontext's MCP tools. Each step below shows both the prompt you type and the tool the agent runs.
 
 :::note[Before you start]
-You need the dotcontext MCP server installed in your AI tool. If you haven't done that yet, run `npx @dotcontext/mcp install` (or follow the [Installation](/getting-started/installation/) page) and restart your tool so it picks up the server.
+You need the dotcontext MCP server installed in your AI tool. If you haven't done that yet, run `npx @dotcontext/mcp install` (or follow the [Installation](/en/getting-started/installation/) page) and restart your tool so it picks up the server.
 :::
 
 ## Step 1 — Bootstrap the context
@@ -33,7 +33,7 @@ Behind the scenes, the agent checks whether `.context/` exists, then scaffolds i
 { "action": "init", "autoFill": true }
 ```
 
-The first call to `context` should include `repoPath`; subsequent calls reuse the cached value. The `init` action creates the `.context/` layout — including `config/` for authored configuration and `runtime/` for generated state. See the [.context convention](/concepts/context-convention/) for the full layout.
+The first call to `context` should include `repoPath`; subsequent calls reuse the cached value. The `init` action creates the `.context/` layout — including `config/` for authored configuration and `runtime/` for generated state. See the [.context convention](/en/concepts/context-convention/) for the full layout.
 
 ## Step 2 — Fill the pending files
 
@@ -117,7 +117,7 @@ dotcontext auto-detects a scale from your description (or you can pass `scale` e
 The canonical workflow state lands in `.context/runtime/workflows/prevc.json`. That file is the single source of truth for the current phase, gate settings, and progress — and because it's persisted, the workflow survives across sessions and tools.
 
 :::tip[Gates are optional but useful]
-You can require a plan before leaving Plan (`require_plan`) or an approval before leaving Review (`require_approval`). Pass these to `workflow-init` to make the runtime enforce them. See [PREVC workflow](/concepts/prevc-workflow/) for the full gate model.
+You can require a plan before leaving Plan (`require_plan`) or an approval before leaving Review (`require_approval`). Pass these to `workflow-init` to make the runtime enforce them. See [PREVC workflow](/en/concepts/prevc-workflow/) for the full gate model.
 :::
 
 ## Step 5 — Work the phases and advance
@@ -169,7 +169,7 @@ After these five steps you have:
 
 ## Where to go next
 
-- [PREVC workflow](/concepts/prevc-workflow/) — the full phase model, scales, roles, and gates
-- [Using dotcontext with MCP](/guides/using-with-mcp/) — prompts, tools, and agent flows in depth
-- [The .context convention](/concepts/context-convention/) — what lives where on disk
-- [MCP tools reference](/reference/mcp-tools/) — every tool, action, and parameter
+- [PREVC workflow](/en/concepts/prevc-workflow/) — the full phase model, scales, roles, and gates
+- [Using dotcontext with MCP](/en/guides/using-with-mcp/) — prompts, tools, and agent flows in depth
+- [The .context convention](/en/concepts/context-convention/) — what lives where on disk
+- [MCP tools reference](/en/reference/mcp-tools/) — every tool, action, and parameter

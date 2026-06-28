@@ -28,7 +28,7 @@ Each phase has a single-letter code, a clear responsibility, and typical roles a
 Plan is where the work is understood before any code is written. You capture requirements, define expected outputs, and — for anything non-trivial — scaffold a plan document. The plan becomes the contract the rest of the workflow checks against.
 
 :::tip[Authoring plans]
-The plan you scaffold here drives the gates downstream. See [Authoring plans](/guides/authoring-plans/) for the structure and how phases map onto plan steps.
+The plan you scaffold here drives the gates downstream. See [Authoring plans](/en/guides/authoring-plans/) for the structure and how phases map onto plan steps.
 :::
 
 ### Review (R)
@@ -41,7 +41,7 @@ Execute is implementation: the code, the unit tests, the actual change. Artifact
 
 ### Verify (V)
 
-Verify runs your quality checks — tests, type checks, QA, code review. This is where [sensors](/concepts/sensors/) earn their keep: they run the project's checks (for example `npm test -- --runInBand`) and emit pass/fail/blocked results that gate completion.
+Verify runs your quality checks — tests, type checks, QA, code review. This is where [sensors](/en/concepts/sensors/) earn their keep: they run the project's checks (for example `npm test -- --runInBand`) and emit pass/fail/blocked results that gate completion.
 
 ### Confirm (C)
 
@@ -127,7 +127,7 @@ dotcontext admin workflow handoff planner developer --artifacts plan.md
 ```
 
 :::tip
-For the full parameter list of every `workflow-*` tool, see the [MCP tools reference](/reference/mcp-tools/).
+For the full parameter list of every `workflow-*` tool, see the [MCP tools reference](/en/reference/mcp-tools/).
 :::
 
 ## How gates connect to task contracts
@@ -136,11 +136,11 @@ Gates check *that the phase is allowed to end*. **Task contracts** check *that t
 
 You define task contracts during the workflow (for example with `workflow-manage` `action: "defineTask"`), and the harness evaluates them against recorded sensor runs and artifacts.
 
-See [Task contracts and handoffs](/concepts/task-contracts/) for the full contract shape and how completion is evaluated.
+See [Task contracts and handoffs](/en/concepts/task-contracts/) for the full contract shape and how completion is evaluated.
 
 ## Where to go next
 
-- [Authoring plans](/guides/authoring-plans/) — write the plan that the Plan phase produces and the gates check.
-- [Task contracts and handoffs](/concepts/task-contracts/) — define the gates that decide when work is truly done.
-- [Sensors](/concepts/sensors/) — the quality checks that power the Verify phase.
-- [MCP tools reference](/reference/mcp-tools/) — every parameter for `workflow-init`, `workflow-status`, `workflow-advance`, and `workflow-manage`.
+- [Authoring plans](/en/guides/authoring-plans/) — write the plan that the Plan phase produces and the gates check.
+- [Task contracts and handoffs](/en/concepts/task-contracts/) — define the gates that decide when work is truly done.
+- [Sensors](/en/concepts/sensors/) — the quality checks that power the Verify phase.
+- [MCP tools reference](/en/reference/mcp-tools/) — every parameter for `workflow-init`, `workflow-status`, `workflow-advance`, and `workflow-manage`.

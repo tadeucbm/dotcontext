@@ -10,15 +10,15 @@ When you bootstrap a project, dotcontext writes two configuration files that the
 This guide shows you how to take ownership of both files: replace bootstrap defaults with real project commands, tune severities and blocking behavior, and write policy rules that gate workflow actions.
 
 :::tip
-Both files live under `.context/config/` and are **version-controlled** — commit them alongside your code so the whole team (and every agent) enforces the same gates. See [The .context layout](/reference/configuration/) for what is tracked vs. ignored.
+Both files live under `.context/config/` and are **version-controlled** — commit them alongside your code so the whole team (and every agent) enforces the same gates. See [The .context layout](/en/reference/configuration/) for what is tracked vs. ignored.
 :::
 
 ## Before you start
 
 These are the concepts behind the two files:
 
-- [Sensors](/concepts/sensors/) — executable quality checks that emit pass/fail/blocked results during a workflow.
-- [Policies](/concepts/policies/) — declarative allow/deny/require-approval rules applied to workflow actions and path changes.
+- [Sensors](/en/concepts/sensors/) — executable quality checks that emit pass/fail/blocked results during a workflow.
+- [Policies](/en/concepts/policies/) — declarative allow/deny/require-approval rules applied to workflow actions and path changes.
 
 Both are consulted by the harness at runtime, so editing them changes behavior without touching code or prompts.
 
@@ -142,7 +142,7 @@ When the harness runs a sensor, it emits a structured result and records it as a
 }
 ```
 
-`status` can be `passed`, `failed`, `skipped`, or `blocked`. Required sensors that don't end up `passed` will block a task contract from completing — see [Task contracts & handoffs](/concepts/task-contracts/).
+`status` can be `passed`, `failed`, `skipped`, or `blocked`. Required sensors that don't end up `passed` will block a task contract from completing — see [Task contracts & handoffs](/en/concepts/task-contracts/).
 
 You can trigger sensors from the MCP `workflow-manage` tool with `action: "runSensors"`, or via the `harness` tool's `recordSensor` action. Task contracts reference sensors by their `id` in `requiredSensors`.
 
@@ -279,7 +279,7 @@ Everyone who pulls the repo — and every agent that reads `.context/` — now e
 
 ## Next steps
 
-- [Sensors](/concepts/sensors/) — the full sensor model, result shapes, and built-ins.
-- [Policies](/concepts/policies/) — evaluation semantics and the bootstrap rule set.
-- [Configuration & the .context layout](/reference/configuration/) — every config file and what git tracks.
-- [Task contracts & handoffs](/concepts/task-contracts/) — how `requiredSensors` gate completion.
+- [Sensors](/en/concepts/sensors/) — the full sensor model, result shapes, and built-ins.
+- [Policies](/en/concepts/policies/) — evaluation semantics and the bootstrap rule set.
+- [Configuration & the .context layout](/en/reference/configuration/) — every config file and what git tracks.
+- [Task contracts & handoffs](/en/concepts/task-contracts/) — how `requiredSensors` gate completion.

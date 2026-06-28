@@ -15,7 +15,7 @@ The key idea is a clean split between two kinds of state:
 Authored state is your source of truth and belongs in git. Generated state is reproducible and is ignored by git. Keeping the two apart means your repository history stays clean, and runtime artifacts never create noisy diffs.
 
 :::tip
-You rarely create `.context/` by hand. Run `context({ action: "init", autoFill: true })` through the MCP server to scaffold it — see [Quickstart](/getting-started/quickstart/).
+You rarely create `.context/` by hand. Run `context({ action: "init", autoFill: true })` through the MCP server to scaffold it — see [Quickstart](/en/getting-started/quickstart/).
 :::
 
 ## The two halves: config and runtime
@@ -132,7 +132,7 @@ A few details worth knowing:
 
 ## Where to go next
 
-- [Reference: the .context layout](/reference/context-layout/) — the full path-by-path breakdown with classifications
-- [Sensors](/concepts/sensors/) — what lives in `.context/config/sensors.json`
-- [Policies](/concepts/policies/) — what lives in `.context/config/policy.json`
-- [The harness runtime](/concepts/harness-runtime/) — what fills `.context/runtime/`
+- [Reference: the .context layout](/en/reference/context-layout/) — the full path-by-path breakdown with classifications
+- [Sensors](/en/concepts/sensors/) — what lives in `.context/config/sensors.json`
+- [Policies](/en/concepts/policies/) — what lives in `.context/config/policy.json`
+- [The harness runtime](/en/concepts/harness-runtime/) — what fills `.context/runtime/`

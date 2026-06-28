@@ -12,7 +12,7 @@ When you link a plan to a workflow, the harness derives a **task contract** from
 This guide walks through scaffolding a plan, writing its frontmatter, and linking it so those gates become meaningful.
 
 :::tip[New to the concepts?]
-Read [Task contracts](/concepts/task-contracts/) and the [PREVC workflow](/concepts/prevc-workflow/) first. This guide assumes you know what a phase, a sensor, and a contract are.
+Read [Task contracts](/en/concepts/task-contracts/) and the [PREVC workflow](/en/concepts/prevc-workflow/) first. This guide assumes you know what a phase, a sensor, and a contract are.
 :::
 
 ## Why plans matter
@@ -138,7 +138,7 @@ Each entry in `phases[].steps[]` is a concrete unit of work.
 
 ### Required sensors
 
-`required_sensors` lists sensor IDs from your [sensor catalog](/concepts/sensors/) (`.context/config/sensors.json`). The IDs must match exactly — for example `tests-passing`, `typecheck-clean`, or `i18n-coverage`. A phase is only considered complete when each listed sensor has a recorded run with `status: "passed"` in the session.
+`required_sensors` lists sensor IDs from your [sensor catalog](/en/concepts/sensors/) (`.context/config/sensors.json`). The IDs must match exactly — for example `tests-passing`, `typecheck-clean`, or `i18n-coverage`. A phase is only considered complete when each listed sensor has a recorded run with `status: "passed"` in the session.
 
 ### Required artifacts
 
@@ -217,7 +217,7 @@ You can inspect the linked plan and its phase mapping at any time:
 
 ## Related reading
 
-- [Task contracts](/concepts/task-contracts/) — how requirements become enforceable gates.
-- [PREVC workflow](/concepts/prevc-workflow/) — the phases and transitions a plan maps onto.
-- [Sensors](/concepts/sensors/) — the quality checks referenced by `required_sensors`.
-- [MCP tools reference](/reference/mcp-tools/) — full `context` and `plan` action lists.
+- [Task contracts](/en/concepts/task-contracts/) — how requirements become enforceable gates.
+- [PREVC workflow](/en/concepts/prevc-workflow/) — the phases and transitions a plan maps onto.
+- [Sensors](/en/concepts/sensors/) — the quality checks referenced by `required_sensors`.
+- [MCP tools reference](/en/reference/mcp-tools/) — full `context` and `plan` action lists.

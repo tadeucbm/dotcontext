@@ -121,7 +121,7 @@ Integrations call the harness only — they never import `cli` or `mcp`.
 
 ## Next steps
 
-- [Installation](/getting-started/installation/) — all install paths including Pi.
-- [Using dotcontext with hooks](/guides/using-with-hooks/) — shell hooks for Claude Code and Codex CLI.
-- [Using dotcontext with MCP](/guides/using-with-mcp/) — the full MCP tool surface.
-- [Architecture](/about/architecture/) — how integrations fit the product shape.
+- [Installation](/en/getting-started/installation/) — all install paths including Pi.
+- [Using dotcontext with hooks](/en/guides/using-with-hooks/) — shell hooks for Claude Code and Codex CLI.
+- [Using dotcontext with MCP](/en/guides/using-with-mcp/) — the full MCP tool surface.
+- [Architecture](/en/about/architecture/) — how integrations fit the product shape.

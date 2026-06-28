@@ -19,13 +19,13 @@ Task contracts give agent execution three properties that loose prompts cannot:
 - **Enforced gates** — a task can only complete when its required sensors have passed and its required artifacts exist.
 - **Auditable handoffs** — every transfer between agents is a durable record with artifacts and evidence attached.
 
-Contracts are the bridge between the [PREVC workflow](/concepts/prevc-workflow/) (which phase are we in?) and the [sensors](/concepts/sensors/) and runtime state (did the work actually happen?).
+Contracts are the bridge between the [PREVC workflow](/en/concepts/prevc-workflow/) (which phase are we in?) and the [sensors](/en/concepts/sensors/) and runtime state (did the work actually happen?).
 
 ## From plan to contract
 
 A task contract is usually **derived from a linked plan**. When you author a plan and link it to a workflow, each plan phase carries the inputs, expected outputs, acceptance criteria, and gates for the work in that phase. The harness materializes those into a task contract under `.context/runtime/contracts/tasks/`.
 
-This is why the convention is to author a plan first — see [Authoring plans](/guides/authoring-plans/). The plan is the human-readable source; the contract is the machine-enforced derivative.
+This is why the convention is to author a plan first — see [Authoring plans](/en/guides/authoring-plans/). The plan is the human-readable source; the contract is the machine-enforced derivative.
 
 You can also define a task contract directly through the harness or workflow tools when there is no full plan to draw from.
 
@@ -57,7 +57,7 @@ A task contract is a JSON record. The fields that matter most day to day:
 
 `requiredSensors` is a list of sensor IDs (for example `tests-passing`, `typecheck-clean`). Before a task can complete, each listed sensor must have a passing run recorded in the session. A sensor that failed, was blocked, or never ran leaves the gate open.
 
-Sensors come from your sensor catalog at `.context/config/sensors.json`. See [Sensors & backpressure](/concepts/sensors/) for how they are detected and run.
+Sensors come from your sensor catalog at `.context/config/sensors.json`. See [Sensors & backpressure](/en/concepts/sensors/) for how they are detected and run.
 
 ### required_artifacts
 
@@ -136,7 +136,7 @@ This is what stops an agent from declaring "implementation done, moving to QA" w
 If `E -> V` will not advance, evaluate the active task contract first. The `blockingFindings` from the evaluation are the authoritative list of what `execution_evidence` is waiting on — usually a sensor that has not passed or a required artifact that has not been produced or recorded.
 :::
 
-For how phases and gates fit together overall, see [The PREVC workflow](/concepts/prevc-workflow/).
+For how phases and gates fit together overall, see [The PREVC workflow](/en/concepts/prevc-workflow/).
 
 ## Handoffs between agents
 
@@ -154,7 +154,7 @@ A handoff contract captures:
 | `sessionId` | The session the handoff belongs to (optional). |
 | `evidence` | Links or findings passed along to the next agent. |
 
-The receiving agent gets a concrete starting point — which artifacts to pick up and what evidence supports them — instead of inferring context from chat history. Because handoffs are durable records, they also show up later in [replay](/concepts/replay-and-datasets/) as part of the session timeline.
+The receiving agent gets a concrete starting point — which artifacts to pick up and what evidence supports them — instead of inferring context from chat history. Because handoffs are durable records, they also show up later in [replay](/en/concepts/replay-and-datasets/) as part of the session timeline.
 
 ## Where contracts are stored
 
@@ -172,15 +172,15 @@ These paths sit under `.context/runtime/`, which is generated state and is **git
 
 ## Putting it together
 
-1. **Author a plan** with clear phases, expected outputs, and acceptance criteria. See [Authoring plans](/guides/authoring-plans/).
+1. **Author a plan** with clear phases, expected outputs, and acceptance criteria. See [Authoring plans](/en/guides/authoring-plans/).
 2. **Link the plan** to a workflow; the harness derives a **task contract** into `.context/runtime/contracts/tasks/` and binds it via `binding.activeTaskId`.
-3. **During Execute (E)**, run [sensors](/concepts/sensors/) and record artifacts so the contract's gates fill in.
+3. **During Execute (E)**, run [sensors](/en/concepts/sensors/) and record artifacts so the contract's gates fill in.
 4. **At `E -> V`**, the `execution_evidence` gate evaluates the contract; the workflow advances only when `canComplete` is `true`.
 5. **Hand off** to the next role with a handoff contract that carries the artifacts and evidence forward.
 
 ## Related
 
-- [Authoring plans](/guides/authoring-plans/) — write the plan that a contract derives from.
-- [The PREVC workflow](/concepts/prevc-workflow/) — phases, roles, and where gates apply.
-- [Sensors & backpressure](/concepts/sensors/) — the quality checks behind `required_sensors`.
-- [Replay & failure datasets](/concepts/replay-and-datasets/) — where contracts and handoffs show up in the timeline.
+- [Authoring plans](/en/guides/authoring-plans/) — write the plan that a contract derives from.
+- [The PREVC workflow](/en/concepts/prevc-workflow/) — phases, roles, and where gates apply.
+- [Sensors & backpressure](/en/concepts/sensors/) — the quality checks behind `required_sensors`.
+- [Replay & failure datasets](/en/concepts/replay-and-datasets/) — where contracts and handoffs show up in the timeline.

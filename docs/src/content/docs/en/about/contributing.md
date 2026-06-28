@@ -7,10 +7,10 @@ sidebar:
 
 dotcontext is open source, and contributions are welcome — whether that is a bug fix, a new sensor heuristic, an extra MCP tool action, or just improving these docs. This page covers everything you need to work in the repository confidently: cloning and building, the validation commands that gate every change, the documentation hygiene we expect, and a map of where things live.
 
-If you only want to *use* dotcontext, you do not need any of this — start at [Installation](/getting-started/installation/) instead. This page is for working **on** the runtime itself.
+If you only want to *use* dotcontext, you do not need any of this — start at [Installation](/en/getting-started/installation/) instead. This page is for working **on** the runtime itself.
 
 :::tip
-Read [Architecture](/about/architecture/) first. It explains the `cli -> harness <- mcp` shape and the boundary rules that the codebase enforces, which makes the directory map below much easier to navigate.
+Read [Architecture](/en/about/architecture/) first. It explains the `cli -> harness <- mcp` shape and the boundary rules that the codebase enforces, which makes the directory map below much easier to navigate.
 :::
 
 ## Prerequisites
@@ -78,7 +78,7 @@ Runs `scripts/smoke-package-bundles.js` to validate the bundles you just built. 
 - `README.md` and `LICENSE` are included; the `prompts/` directory is present for CLI.
 
 :::caution
-The "no `dist/services/`" check is intentional. If a package smoke test fails on it, you have probably moved domain behavior into `cli` or `mcp` instead of `harness`. See [Architecture](/about/architecture/) for the boundary rules.
+The "no `dist/services/`" check is intentional. If a package smoke test fails on it, you have probably moved domain behavior into `cli` or `mcp` instead of `harness`. See [Architecture](/en/about/architecture/) for the boundary rules.
 :::
 
 ## The five packages
@@ -93,7 +93,7 @@ The monorepo publishes five independent packages off one shared version. Underst
 | `@dotcontext/integrations` | Host hook adapters and event mappers for Claude Code, Codex CLI, and Pi. | — |
 | `@dotcontext/pi` | Pi npm extension for in-process lifecycle hooks. | — |
 
-All five are versioned together so they stay compatible. For the full export and packaging detail, see [Packaging & versioning](/reference/configuration/).
+All five are versioned together so they stay compatible. For the full export and packaging detail, see [Packaging & versioning](/en/reference/configuration/).
 
 :::note
 The root `package.json` only exposes the `dotcontext` bin. The `dotcontext-mcp` binary appears in the `.release/packages/mcp/` manifest produced by `build:packages` — the root CLI starts the server with `dotcontext mcp`, not a separate binary.
@@ -135,7 +135,7 @@ The source is organized around the `cli -> harness <- mcp` shape. Keep domain be
 | `scripts/build-package-bundles.js` | Package bundling. |
 | `scripts/smoke-package-bundles.js` | Package smoke tests. |
 
-A good first read is `ARCHITECTURE.md` for the boundary diagrams, then `README.md` for the product framing, then the [documentation site](/getting-started/quickstart/) for the usage flows you are about to change.
+A good first read is `ARCHITECTURE.md` for the boundary diagrams, then `README.md` for the product framing, then the [documentation site](/en/getting-started/quickstart/) for the usage flows you are about to change.
 
 ## Branching and commits
 
@@ -145,7 +145,7 @@ Open your pull request against `main` on [GitHub](https://github.com/vinilana/do
 
 ## Next steps
 
-- [Architecture](/about/architecture/) — the boundaries your change must respect.
-- [Packaging & versioning](/reference/configuration/) — how the five packages are built and released.
-- [CLI commands](/reference/cli-commands/) — the operator surface you may be extending.
-- [MCP tools](/reference/mcp-tools/) — the tool actions exposed to AI clients.
+- [Architecture](/en/about/architecture/) — the boundaries your change must respect.
+- [Packaging & versioning](/en/reference/configuration/) — how the five packages are built and released.
+- [CLI commands](/en/reference/cli-commands/) — the operator surface you may be extending.
+- [MCP tools](/en/reference/mcp-tools/) — the tool actions exposed to AI clients.

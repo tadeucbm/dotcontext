@@ -21,7 +21,7 @@ Use **hooks** for low-token bootstrap, tracing, and workflow reminders. Use **MC
 | Codex CLI | `dotcontext hook install codex` | `.codex/hooks.json` by default, or inline `.codex/config.toml` with `--format toml` |
 | Pi | `dotcontext hook install pi` | Pi extension install guidance for `pi install npm:@dotcontext/pi` |
 
-Pi uses an in-process extension instead of shell hooks. See [Using dotcontext with Pi](/guides/using-with-pi/).
+Pi uses an in-process extension instead of shell hooks. See [Using dotcontext with Pi](/en/guides/using-with-pi/).
 
 ## Install hooks
 
@@ -200,7 +200,7 @@ Recommended setup for Claude Code, Codex CLI, or Pi:
 
 ## Next steps
 
-- [Installation](/getting-started/installation/) — MCP, hooks, and Pi install paths.
-- [Using dotcontext with MCP](/guides/using-with-mcp/) — the full MCP tool surface.
-- [The harness runtime](/concepts/harness-runtime/) — sessions, traces, and artifacts.
-- [The PREVC workflow](/concepts/prevc-workflow/) — what `workflow-guide` reports on stop.
+- [Installation](/en/getting-started/installation/) — MCP, hooks, and Pi install paths.
+- [Using dotcontext with MCP](/en/guides/using-with-mcp/) — the full MCP tool surface.
+- [The harness runtime](/en/concepts/harness-runtime/) — sessions, traces, and artifacts.
+- [The PREVC workflow](/en/concepts/prevc-workflow/) — what `workflow-guide` reports on stop.

@@ -16,7 +16,7 @@ Both the CLI and the MCP server are thin transports. The actual work — recordi
 This page explains the four runtime entities the harness manages — **sessions**, **traces**, **artifacts**, and **checkpoints** — and where they live on disk.
 
 ::: tip[Why this matters]
-A session is what turns a one-off agent run into something **legible, resumable, and auditable**. Once execution is recorded as durable state, you can pause and resume it, inspect every step, and reconstruct the whole timeline later with [replay](/concepts/replay-and-datasets/).
+A session is what turns a one-off agent run into something **legible, resumable, and auditable**. Once execution is recorded as durable state, you can pause and resume it, inspect every step, and reconstruct the whole timeline later with [replay](/en/concepts/replay-and-datasets/).
 :::
 
 ## The runtime layer
@@ -28,7 +28,7 @@ The harness is a transport-agnostic execution layer. Whether an agent calls the 
 - records **artifacts** the run produced (text, JSON, or files), and
 - captures **checkpoints** — named waypoints that bundle artifacts and state.
 
-All of this is stored under `.context/runtime/`, which is generated state and is **not** version-controlled. See the [context layout reference](/reference/context-layout/) for the full directory map and what is tracked versus ignored.
+All of this is stored under `.context/runtime/`, which is generated state and is **not** version-controlled. See the [context layout reference](/en/reference/context-layout/) for the full directory map and what is tracked versus ignored.
 
 ## Where runtime state lives
 
@@ -123,7 +123,7 @@ Each trace entry looks like this:
 Because the file is **append-only** (`.jsonl`, one JSON object per line), traces are cheap to write and never rewrite earlier entries. Use the `harness` tool's `appendTrace` action to add an event and `listTraces` to read the timeline.
 
 ::: note
-Trace `event` values like `sensor.run` are how the harness records [sensor](/concepts/sensors/) results into a session. That's what later lets task contracts check whether required sensors passed, and lets [failure datasets](/concepts/replay-and-datasets/) cluster error-level events.
+Trace `event` values like `sensor.run` are how the harness records [sensor](/en/concepts/sensors/) results into a session. That's what later lets task contracts check whether required sensors passed, and lets [failure datasets](/en/concepts/replay-and-datasets/) cluster error-level events.
 :::
 
 ## Artifacts
@@ -149,7 +149,7 @@ An **artifact** is something a run produced and wants to keep — a generated do
 | `json` | Small inline structured content |
 | `file` | A reference to a file (via `path`), for larger outputs |
 
-For small outputs the value can live inline in `content`; for larger ones, set `path` to point at the file in the repo. Recorded artifacts are what **task contracts** check against when deciding whether a task's `requiredArtifacts` are satisfied — see [task contracts and handoffs](/concepts/task-contracts/) for how that gating works.
+For small outputs the value can live inline in `content`; for larger ones, set `path` to point at the file in the repo. Recorded artifacts are what **task contracts** check against when deciding whether a task's `requiredArtifacts` are satisfied — see [task contracts and handoffs](/en/concepts/task-contracts/) for how that gating works.
 
 Add artifacts with the `harness` tool's `addArtifact` action and read them with `listArtifacts`.
 
@@ -190,7 +190,7 @@ Because all of this is persisted, the harness can reconstruct the full timeline 
 
 ## Next steps
 
-- [Replay and failure datasets](/concepts/replay-and-datasets/) — reconstruct a session's timeline and build a failure corpus from it.
-- [Sensors](/concepts/sensors/) — the quality checks whose results land in the trace as `sensor.run` events.
-- [Task contracts and handoffs](/concepts/task-contracts/) — gates that check recorded sensors and artifacts before a task can complete.
-- [Context layout reference](/reference/context-layout/) — the full `.context/` directory map, including what is tracked versus ignored.
+- [Replay and failure datasets](/en/concepts/replay-and-datasets/) — reconstruct a session's timeline and build a failure corpus from it.
+- [Sensors](/en/concepts/sensors/) — the quality checks whose results land in the trace as `sensor.run` events.
+- [Task contracts and handoffs](/en/concepts/task-contracts/) — gates that check recorded sensors and artifacts before a task can complete.
+- [Context layout reference](/en/reference/context-layout/) — the full `.context/` directory map, including what is tracked versus ignored.

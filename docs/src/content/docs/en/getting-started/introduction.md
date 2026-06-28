@@ -74,9 +74,9 @@ If you just want a one-off answer in a single chat, you do not need dotcontext. 
 
 ## Where to go next
 
-- **[Installation](/getting-started/installation/)** — install the MCP server (recommended) or the standalone CLI.
-- **[Quickstart](/getting-started/quickstart/)** — go from an empty repo to a running PREVC workflow in a few steps.
-- **[Concepts overview](/concepts/prevc-workflow/)** — understand the PREVC workflow, sensors, policies, task contracts, and runtime state in depth.
-- **[MCP tools reference](/reference/mcp-tools/)** — the full list of tools your AI client can call.
+- **[Installation](/en/getting-started/installation/)** — install the MCP server (recommended) or the standalone CLI.
+- **[Quickstart](/en/getting-started/quickstart/)** — go from an empty repo to a running PREVC workflow in a few steps.
+- **[Concepts overview](/en/concepts/prevc-workflow/)** — understand the PREVC workflow, sensors, policies, task contracts, and runtime state in depth.
+- **[MCP tools reference](/en/reference/mcp-tools/)** — the full list of tools your AI client can call.
 
 For source and issues, see the project on [GitHub](https://github.com/vinilana/dotcontext).

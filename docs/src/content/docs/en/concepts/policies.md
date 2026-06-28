@@ -10,7 +10,7 @@ Sensors tell you whether work is *good*. Policies tell you whether work is *allo
 Policies live in a single version-controlled document so your whole team shares the same boundaries — protecting core paths, blocking secrets, and requiring review where it matters.
 
 :::tip
-Policies pair naturally with [sensors](/concepts/sensors/). Sensors verify outcomes; policies constrain actions. Together they form the quality and safety layer around the [PREVC workflow](/concepts/prevc-workflow/).
+Policies pair naturally with [sensors](/en/concepts/sensors/). Sensors verify outcomes; policies constrain actions. Together they form the quality and safety layer around the [PREVC workflow](/en/concepts/prevc-workflow/).
 :::
 
 ## The policy document
@@ -114,7 +114,7 @@ When the harness initializes a project, it writes a starter `policy.json` with t
 | `protect-repository-config` | `require_approval` | Gate high-risk changes to configuration directories. |
 | `block-secrets` | `deny` | Hard-block edits to secret-bearing files such as `**/.env*` and `**/*.key`. |
 
-These defaults are a starting point, not a finished policy. Customize them for your repository — see [Customizing sensors and policies](/guides/customizing-sensors-and-policies/).
+These defaults are a starting point, not a finished policy. Customize them for your repository — see [Customizing sensors and policies](/en/guides/customizing-sensors-and-policies/).
 
 ## Policies and autonomous mode
 
@@ -148,7 +148,7 @@ Relevant fields when registering or evaluating a rule include `scope`, `effect`,
 
 ## Where to go next
 
-- [Sensors](/concepts/sensors/) — the quality checks that pair with policy guardrails.
-- [PREVC workflow](/concepts/prevc-workflow/) — the phases that policies gate.
-- [Customizing sensors and policies](/guides/customizing-sensors-and-policies/) — tune `policy.json` and `sensors.json` for your repo.
-- [MCP tools reference](/reference/mcp-tools/) — the full `harness` action surface.
+- [Sensors](/en/concepts/sensors/) — the quality checks that pair with policy guardrails.
+- [PREVC workflow](/en/concepts/prevc-workflow/) — the phases that policies gate.
+- [Customizing sensors and policies](/en/guides/customizing-sensors-and-policies/) — tune `policy.json` and `sensors.json` for your repo.
+- [MCP tools reference](/en/reference/mcp-tools/) — the full `harness` action surface.

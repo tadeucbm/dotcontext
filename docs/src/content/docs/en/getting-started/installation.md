@@ -13,7 +13,7 @@ There are two ways to get started:
 2. **CLI install** — a standalone command-line tool focused on sync and admin tasks (importing/exporting rules, agents, and skills between `.context/` and your AI tools).
 
 :::tip[Recommended path]
-Start with the MCP install. Context creation, AI-generated fills, and plan scaffolding are MCP-first, so the MCP server gives you the full product surface inside your assistant. Reach for the CLI when you need to sync artifacts or manage low-level state. See the [Quickstart](/getting-started/quickstart/) for the end-to-end flow.
+Start with the MCP install. Context creation, AI-generated fills, and plan scaffolding are MCP-first, so the MCP server gives you the full product surface inside your assistant. Reach for the CLI when you need to sync artifacts or manage low-level state. See the [Quickstart](/en/getting-started/quickstart/) for the end-to-end flow.
 :::
 
 ## Prerequisites
@@ -124,7 +124,7 @@ MCP config remains global by default. Recommended hooks install project-local co
 
 For Pi, the combined `mcp:install pi --with-hooks` flow uses the MCP installer for the `.mcp.json` snippet and the Pi hook step for extension guidance. It should not duplicate the MCP snippet.
 
-After installing, restart your AI client so it picks up the new MCP server. Then continue with the [Quickstart](/getting-started/quickstart/).
+After installing, restart your AI client so it picks up the new MCP server. Then continue with the [Quickstart](/en/getting-started/quickstart/).
 
 ## Path 1b: Hook install (Claude Code, Codex CLI, Pi)
 
@@ -157,7 +157,7 @@ Actions are logged to `.context/logs/hook-install.log`. For Codex setup checks, 
 npx -y @dotcontext/cli@latest hook doctor codex
 ```
 
-See [Using dotcontext with hooks](/guides/using-with-hooks/) for lifecycle details.
+See [Using dotcontext with hooks](/en/guides/using-with-hooks/) for lifecycle details.
 
 ## Path 1c: Pi extension
 
@@ -175,7 +175,7 @@ npx @dotcontext/mcp install pi --local
 pi install npm:pi-mcp-adapter
 ```
 
-See [Using dotcontext with Pi](/guides/using-with-pi/) for the recommended hooks + MCP setup.
+See [Using dotcontext with Pi](/en/guides/using-with-pi/) for the recommended hooks + MCP setup.
 
 ## Path 2: CLI install
 
@@ -218,19 +218,19 @@ The CLI surface covers:
 - `admin` — low-level workflow state, skill export, and reports
 
 :::caution[MCP-first features]
-Context creation, AI-generated fills, and plan scaffolding are **not** standalone CLI commands — they run through the MCP server. If you want those, use the MCP install path above. See [How dotcontext works](/about/architecture/) for the boundary between the CLI, harness, and MCP surfaces.
+Context creation, AI-generated fills, and plan scaffolding are **not** standalone CLI commands — they run through the MCP server. If you want those, use the MCP install path above. See [How dotcontext works](/en/about/architecture/) for the boundary between the CLI, harness, and MCP surfaces.
 :::
 
 ## Verify your install
 
-After the MCP install, confirm your AI client can see the dotcontext tools (for example, `context`, `explore`, `workflow-init`, and `harness`). A quick check is to ask your assistant to run the context check tool against your repository, which is the first step in the [Quickstart](/getting-started/quickstart/).
+After the MCP install, confirm your AI client can see the dotcontext tools (for example, `context`, `explore`, `workflow-init`, and `harness`). A quick check is to ask your assistant to run the context check tool against your repository, which is the first step in the [Quickstart](/en/getting-started/quickstart/).
 
 ## Next steps
 
-- [Quickstart](/getting-started/quickstart/) — initialize `.context/` and start your first PREVC workflow.
-- [Using dotcontext with hooks](/guides/using-with-hooks/) — Claude Code and Codex CLI lifecycle hooks.
-- [Using dotcontext with Pi](/guides/using-with-pi/) — Pi extension and MCP coexistence.
-- [The PREVC workflow](/concepts/prevc-workflow/) — understand the five phases.
-- [MCP tools reference](/reference/mcp-tools/) — full list of tools and parameters.
+- [Quickstart](/en/getting-started/quickstart/) — initialize `.context/` and start your first PREVC workflow.
+- [Using dotcontext with hooks](/en/guides/using-with-hooks/) — Claude Code and Codex CLI lifecycle hooks.
+- [Using dotcontext with Pi](/en/guides/using-with-pi/) — Pi extension and MCP coexistence.
+- [The PREVC workflow](/en/concepts/prevc-workflow/) — understand the five phases.
+- [MCP tools reference](/en/reference/mcp-tools/) — full list of tools and parameters.
 
 For source and issues, see [github.com/vinilana/dotcontext](https://github.com/vinilana/dotcontext).

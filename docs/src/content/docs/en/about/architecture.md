@@ -58,7 +58,7 @@ The harness owns:
 
 All of this is persisted under `.context/`, the single on-disk home for both authored configuration and generated runtime state.
 
-For a deep dive into sessions, traces, artifacts, and checkpoints, see the [harness runtime concept](/concepts/harness-runtime/).
+For a deep dive into sessions, traces, artifacts, and checkpoints, see the [harness runtime concept](/en/concepts/harness-runtime/).
 
 ## The boundaries
 
@@ -75,19 +75,19 @@ The repository keeps strict boundaries so the harness stays reusable and the tra
 
 The CLI is the **operator-facing** transport. It is sync and admin focused: distributing artifacts between `.context/` and AI tool directories, installing the MCP server and lifecycle hooks into client configs, generating reports, and managing low-level workflow state.
 
-Notably, the CLI does **not** create context, generate AI fills, or scaffold plans on its own — those flows are MCP-first. See [using the CLI](/guides/using-the-cli/) for the full command surface.
+Notably, the CLI does **not** create context, generate AI fills, or scaffold plans on its own — those flows are MCP-first. See [using the CLI](/en/guides/using-the-cli/) for the full command surface.
 
 ### The MCP transport boundary
 
 The MCP server is the **agent-facing** transport. It exposes the harness as a set of Model Context Protocol tools (`explore`, `context`, `sync`, `plan`, `agent`, `skill`, `harness`, and the dedicated `workflow-*` tools) plus resources like `context://codebase/{contextType}` and `workflow://status`.
 
-This is the surface an AI client (Claude Code, Cursor, Windsurf, and others) talks to. See [using dotcontext with MCP](/guides/using-with-mcp/) to get it installed.
+This is the surface an AI client (Claude Code, Cursor, Windsurf, and others) talks to. See [using dotcontext with MCP](/en/guides/using-with-mcp/) to get it installed.
 
 ### The integrations boundary
 
 **Integrations** connect host lifecycle events to the harness without going through MCP. Claude Code and Codex CLI use shell dispatch (`npx -y @dotcontext/cli@latest hook dispatch`); Pi loads the `@dotcontext/pi` npm extension in-process.
 
-Integrations call the harness only — they never import `cli` or `mcp`. See [using dotcontext with hooks](/guides/using-with-hooks/) and [using dotcontext with Pi](/guides/using-with-pi/).
+Integrations call the harness only — they never import `cli` or `mcp`. See [using dotcontext with hooks](/en/guides/using-with-hooks/) and [using dotcontext with Pi](/en/guides/using-with-pi/).
 
 ### The harness internals: domain, application, adapters
 
@@ -185,10 +185,10 @@ That single shared runtime is what makes a dotcontext session **legible, resumab
 
 ## Next steps
 
-- [The harness runtime](/concepts/harness-runtime/) — sessions, traces, artifacts, and checkpoints in depth.
-- [The PREVC workflow](/concepts/prevc-workflow/) — the five phases and scale-adaptive routing the harness drives.
-- [Using dotcontext with MCP](/guides/using-with-mcp/) — install the MCP server into your AI client.
-- [Using dotcontext with hooks](/guides/using-with-hooks/) — Claude Code and Codex CLI lifecycle hooks.
-- [Using dotcontext with Pi](/guides/using-with-pi/) — Pi extension and MCP coexistence.
-- [Using the CLI](/guides/using-the-cli/) — the operator-facing command surface.
+- [The harness runtime](/en/concepts/harness-runtime/) — sessions, traces, artifacts, and checkpoints in depth.
+- [The PREVC workflow](/en/concepts/prevc-workflow/) — the five phases and scale-adaptive routing the harness drives.
+- [Using dotcontext with MCP](/en/guides/using-with-mcp/) — install the MCP server into your AI client.
+- [Using dotcontext with hooks](/en/guides/using-with-hooks/) — Claude Code and Codex CLI lifecycle hooks.
+- [Using dotcontext with Pi](/en/guides/using-with-pi/) — Pi extension and MCP coexistence.
+- [Using the CLI](/en/guides/using-the-cli/) — the operator-facing command surface.
 - [dotcontext on GitHub](https://github.com/vinilana/dotcontext) — the source.

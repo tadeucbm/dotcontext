@@ -9,7 +9,7 @@ Every workflow produces a trail of events: sensor runs, phase changes, artifacts
 
 Together they turn ephemeral session activity into a learning loop: replay tells you *what happened* in one run; datasets tell you *what keeps going wrong* across runs.
 
-These features sit on top of the [harness runtime](/concepts/harness-runtime/), which records the underlying sessions, traces, artifacts, sensor runs, tasks, and handoffs.
+These features sit on top of the [harness runtime](/en/concepts/harness-runtime/), which records the underlying sessions, traces, artifacts, sensor runs, tasks, and handoffs.
 
 ## Why replay and datasets exist
 
@@ -182,7 +182,7 @@ A dataset is built from the replays that exist when you run `buildDataset`. To c
 
 ## Where to go next
 
-- [Harness runtime](/concepts/harness-runtime/) — the sessions, traces, artifacts, and checkpoints that replays are built from.
-- [Sensors & backpressure](/concepts/sensors/) — the quality checks whose failures populate datasets.
-- [Task contracts & handoffs](/concepts/task-contracts/) — the gates that produce `task`-kind failures.
-- [MCP tools reference](/reference/mcp-tools/) — the full `harness` action list, including replay and dataset actions.
+- [Harness runtime](/en/concepts/harness-runtime/) — the sessions, traces, artifacts, and checkpoints that replays are built from.
+- [Sensors & backpressure](/en/concepts/sensors/) — the quality checks whose failures populate datasets.
+- [Task contracts & handoffs](/en/concepts/task-contracts/) — the gates that produce `task`-kind failures.
+- [MCP tools reference](/en/reference/mcp-tools/) — the full `harness` action list, including replay and dataset actions.
